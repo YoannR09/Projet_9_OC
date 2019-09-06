@@ -75,7 +75,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
         sequenceEcritureComptable.setJournalCode(pEcritureComptable.getJournal().getCode());
         sequenceEcritureComptable.setAnnee(dateEcritureComptable);
-        SequenceEcritureComptable vExistingSequence = getDaoProxy().getComptabiliteDao().getSequenceByCodeAndAnneeCourante(sequenceEcritureComptable);
+        SequenceEcritureComptable vExistingSequence = null ;// getDaoProxy().getComptabiliteDao().getSequenceByCodeAndAnneeCourante(sequenceEcritureComptable);
         Integer numeroSequence;
         if (vExistingSequence == null){
             numeroSequence = 1;
@@ -245,7 +245,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     public void upsertSequenceEcritureComptable(SequenceEcritureComptable pSequence) {
         TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
         try {
-            getDaoProxy().getComptabiliteDao().upsertSequenceEcritureComptable(pSequence);
+            // méthode pour mettre à jour la séquence.
             getTransactionManager().commitMyERP(vTS);
             vTS = null;
         } finally {

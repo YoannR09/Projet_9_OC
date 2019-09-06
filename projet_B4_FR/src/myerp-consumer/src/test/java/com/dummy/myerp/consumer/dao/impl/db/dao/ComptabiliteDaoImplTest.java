@@ -1,13 +1,15 @@
 package com.dummy.myerp.consumer.dao.impl.db.dao;
 
+
 import com.dummy.myerp.consumer.db.DataSourcesEnum;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
+import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.testconsumer.consumer.ConsumerTestCase;
 import com.dummy.myerp.testconsumer.consumer.SpringRegistry;
-import javafx.beans.binding.When;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.AfterClass;
@@ -15,15 +17,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 
-import java.sql.ResultSet;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ComptabiliteDaoImplTest extends ConsumerTestCase {
@@ -33,6 +34,9 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
 
     EcritureComptable ecritureComptable;
 
+    /**
+     * Test de la méthode pour récupérer une liste de compteComptable
+     */
     @Test
     public void getListCompteComptable() {
         try {
@@ -45,6 +49,9 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
         }
     }
 
+    /**
+     * Test de la méthode pour récupérer une liste de journalComptable
+     */
     @Test
     public void getListJournalComptable() {
         try {
@@ -58,6 +65,9 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
         }
     }
 
+    /**
+     * Test de la méthode pour récupérer une liste d'écritureComptable
+     */
     @Test
     public void getListEcritureComptable() {
         try {
@@ -70,6 +80,9 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
         }
     }
 
+    /**
+     * Test de la méthode pour récupérer une ecritureComptable via un id
+     */
     @Test
     public void getEcritureComptable(){
         try {
@@ -82,6 +95,9 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
         }
     }
 
+    /**
+     * Test de la méthode pour récupérer une ecritureComptable via une réference
+     */
     @Test
     public void getEcritureComptableByRef(){
         try {
@@ -95,6 +111,9 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
         }
     }
 
+    /**
+     * Test de la méthode pour initaliser la liste des ligneEcriture de l'ecritureComptable
+     */
     @Test
     public void loadListLigneEcriture() {
         try {
@@ -128,6 +147,7 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
 
         comptabiliteDao.deleteListLigneEcritureComptable(5);
     }
+
 
 
     @BeforeEach

@@ -262,41 +262,5 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         vSqlParams.addValue("ecriture_id", pEcritureId);
         vJdbcTemplate.update(SQLdeleteListLigneEcritureComptable, vSqlParams);
     }
-    /** SQLupsertSequenceEcritureComptable */
-    private static String SQLupsertSequenceEcritureComptable;
 
-    public void setSQLupsertSequenceEcritureComptable(String pSQLupsertSequenceEcritureComptable) {
-        SQLupsertSequenceEcritureComptable = pSQLupsertSequenceEcritureComptable;
-    }
-
-    @Override
-    public void upsertSequenceEcritureComptable(SequenceEcritureComptable pSequence) {
-        NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
-        MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
-        vSqlParams.addValue("journal_code", pSequence.getJournalCode());
-        vSqlParams.addValue("annee", pSequence.getAnnee());
-        vSqlParams.addValue("derniere_valeur", pSequence.getDerniereValeur());
-        vJdbcTemplate.update(SQLupsertSequenceEcritureComptable, vSqlParams);
-    }
-
-    /** getSequenceByCodeAndAnneeCourante */
-    private static String SQLgetSequenceByCodeAndAnneeCourante;
-
-    public void setSQLgetSequenceByCodeAndAnneeCourante(String pSQLgetSequenceByCodeAndAnneeCourante) {
-        SQLgetSequenceByCodeAndAnneeCourante = pSQLgetSequenceByCodeAndAnneeCourante;
-    }
-
-    @Override
-    public SequenceEcritureComptable getSequenceByCodeAndAnneeCourante(SequenceEcritureComptable pSequence) throws NotFoundException {
-        NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
-        SequenceEcritureComptableRM vRM = new SequenceEcritureComptableRM();
-        MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
-        vSqlParams.addValue("journal_code", pSequence.getJournalCode());
-        vSqlParams.addValue("annee", pSequence.getAnnee());
-        try {
-            return vJdbcTemplate.queryForObject(SQLgetSequenceByCodeAndAnneeCourante, vSqlParams, vRM);
-        } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("SequenceEcritureComptable non trouvée : journal_code=" + pSequence.getJournalCode() + ", annee=" + pSequence.getAnnee());
-        }
-    }
 }
