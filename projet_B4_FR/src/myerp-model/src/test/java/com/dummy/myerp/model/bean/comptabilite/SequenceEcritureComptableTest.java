@@ -40,11 +40,20 @@ public class SequenceEcritureComptableTest {
     }
 
     @Test
-    public void toStringTest(){
-        String toString = "SequenceEcritureComptable{annee=2019, derniereValeur=10}";
-        Integer annee = new Integer(2019);
-        Integer derniereValeur = new Integer(10);
-        SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable(annee,derniereValeur);
-        Assert.assertEquals(toString,sequenceEcritureComptable.toString());
+    public void getJournalCode() {
+        JournalComptable journalComptable = new JournalComptable("AC","libelle");
+        SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
+        sequenceEcritureComptable.setJournalCode(journalComptable.getCode());
+
+        Assert.assertEquals(sequenceEcritureComptable.getJournalCode(),"AC");
+    }
+
+    @Test
+    public void setJournalCode() {
+        JournalComptable journalComptable = new JournalComptable("AC","libelle");
+        SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
+        sequenceEcritureComptable.setJournalCode(journalComptable.getCode());
+
+        Assert.assertEquals(sequenceEcritureComptable.getJournalCode(),"AC");
     }
 }

@@ -1,137 +1,61 @@
 package com.dummy.myerp.consumer.dao.impl.db.rowmapper;
 
+
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.CompteComptableRM;
-import com.dummy.myerp.consumer.db.AbstractDbConsumer;
-import com.dummy.myerp.consumer.db.DataSourcesEnum;
+
+
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+
+
+import org.mockito.Mockito;
+
+import org.mockito.stubbing.Answer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
-import org.springframework.jdbc.support.SQLStateSQLExceptionTranslator;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import java.sql.ResultSet;
 
 
-import java.sql.*;
-import java.util.List;
 
 
-public class CompteComptableRMTest extends AbstractDbConsumer {
+public class CompteComptableRMTest{
 
-    /*
     @Test
     public void mapRow(){
 
-        String vSQL = " SELECT * FROM compte_comptable";
-        JdbcTemplate vJdbcTemplate = new JdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
-        CompteComptableRM compteComptableRM = new CompteComptableRM();
+        CompteComptableRM rm = new CompteComptableRM();
 
-        Assert.assertNotNull(compteComptableRM.mapRow(,1)vJdbcTemplate.query(vSQL, compteComptableRM));
-    }
-    */
+        final CompteComptable result = new CompteComptable();
 
-    private final Connection connection = mock(Connection.class);
-    private final Statement statement = mock(Statement.class);
-    private final PreparedStatement preparedStatement = mock(PreparedStatement.class);
-    private final ResultSet resultSet = mock(ResultSet.class);
-    private final JdbcTemplate template = new JdbcTemplate();
+        final JdbcTemplate template = Mockito.mock(JdbcTemplate.class);
 
-    private final RowMapper<CompteComptable> testRowMapper =
-            (rs, rowNum) -> new CompteComptable(Integer.parseInt(rs.getString("1")), rs.getString(2));
+        Mockito.when(template.queryForObject(Mockito.anyString(), Mockito.any(RowMapper.class)))
+                .thenAnswer((Answer<CompteComptable>) invocation -> {
 
-    private List<CompteComptable> result;
+                    ResultSet rs = Mockito.mock(ResultSet.class);
+                    String libelle = "libelle";
+                    Integer numero = new Integer(25446);
+                    Mockito.when(rs.getString("libelle")).thenReturn(libelle);
+                    Mockito.when(rs.getInt("numero")).thenReturn(numero);
 
+                    CompteComptable actual = rm.mapRow(rs, 0);
 
+                    result.setNumero(actual.getNumero());
+                    result.setLibelle(actual.getLibelle());
 
-    @BeforeEach
-    public void setUp() throws SQLException {
+                    Assert.assertEquals(actual.getNumero(),numero);
+                    Assert.assertEquals(actual.getLibelle(),libelle);
 
-        given(connection.createStatement()).willReturn(statement);
-        given(connection.prepareStatement(anyString())).willReturn(preparedStatement);
-        given(statement.executeQuery(anyString())).willReturn(resultSet);
-        given(preparedStatement.executeQuery()).willReturn(resultSet);
-        given(resultSet.next()).willReturn(true, true, false);
-        when(resultSet.getString("numero")).thenReturn("353");
+                    return result;
+                });
 
-        template.setDataSource(new SingleConnectionDataSource(connection, false));
-        template.setExceptionTranslator(new SQLStateSQLExceptionTranslator());
+        CompteComptable compteComptable = template.queryForObject("SELECT * FROM compte_comptable WHERE id = -3",rm);
 
-        template.afterPropertiesSet();
+        Assert.assertEquals(compteComptable.getNumero(),new Integer(25446));
+        Assert.assertEquals(compteComptable.getLibelle(),"libelle");
     }
 
 
-    @AfterEach
-    public void verifyClosed() throws Exception {
-        verify(resultSet).close();
-        // verify(connection).close();
-    }
-
-
-    @AfterEach
-    public void verifyResults() {
-        Assert.assertNotNull(result);
-        Assert.assertEquals(result.size(),1);
-
-        CompteComptable compteComptable = result.get(1);
-        Assert.assertEquals(compteComptable.getNumero(),"353");
-    }
-
-
-
-    @Test
-
-    public void staticQueryWithRowMapper() throws SQLException {
-
-        result = template.query("some SQL", testRowMapper);
-
-        verify(statement).close();
-    }
-
-
-
-    @Test
-    public void preparedStatementCreatorWithRowMapper() throws SQLException {
-        result = template.query(con -> preparedStatement, testRowMapper);
-        verify(preparedStatement).close();
-    }
-
-
-
-    @Test
-    public void preparedStatementSetterWithRowMapper() throws SQLException {
-        result = template.query("some SQL", ps -> ps.setString(1, "test"), testRowMapper);
-        verify(preparedStatement).setString(1, "test");
-        verify(preparedStatement).close();
-    }
-
-
-
-    @Test
-    public void queryWithArgsAndRowMapper() throws SQLException {
-        result = template.query("some SQL", new Object[] { "test1", "test2" }, testRowMapper);
-        preparedStatement.setString(1, "test1");
-        preparedStatement.setString(2, "test2");
-        preparedStatement.close();
-    }
-
-
-
-    @Test
-    public void queryWithArgsAndTypesAndRowMapper() throws SQLException {
-        result = template.query("some SQL",
-
-                new Object[] { "test1", "test2" },
-
-                new int[] { Types.VARCHAR, Types.VARCHAR },
-                testRowMapper);
-        verify(preparedStatement).setString(1, "test1");
-        verify(preparedStatement).setString(2, "test2");
-        verify(preparedStatement).close();
-    }
 }

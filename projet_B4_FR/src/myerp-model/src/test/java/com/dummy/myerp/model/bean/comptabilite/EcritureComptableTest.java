@@ -39,13 +39,13 @@ public class EcritureComptableTest {
     @Test
     public void getTotalDebit() {
 
-        Assert.assertEquals(new BigDecimal("341.00"),vEcriture.getTotalDebit());
+        Assert.assertEquals(new BigDecimal("341"),vEcriture.getTotalDebit());
     }
 
     @Test
     public void getTotalCredit() {
 
-        Assert.assertEquals(new BigDecimal("341.00"),vEcriture.getTotalCredit());
+        Assert.assertEquals(new BigDecimal("341"),vEcriture.getTotalCredit());
     }
 
     @Test
@@ -121,8 +121,8 @@ public class EcritureComptableTest {
         vEcriture.setJournal(journal);
         vEcriture.setReference("reference");
         vEcriture.setLibelle("Equilibrée");
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "200.50", null));
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "100.50", "33"));
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, "200", null));
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, "101", "33"));
         vEcriture.getListLigneEcriture().add(this.createLigne(2, null, "301"));
         vEcriture.getListLigneEcriture().add(this.createLigne(2, "40", "7"));
     }

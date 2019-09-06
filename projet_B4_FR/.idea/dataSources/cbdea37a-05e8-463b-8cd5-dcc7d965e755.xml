@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="db_myerp@localhost">
+  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.14">
+    <root id="1">
+      <ServerVersion>9.4.24</ServerVersion>
+    </root>
+    <database id="2" parent="1" name="db_myerp">
+      <ObjectId>16384</ObjectId>
+      <StateNumber>683</StateNumber>
+      <Owner>usr_myerp</Owner>
+      <IntrospectionStateNumber>575</IntrospectionStateNumber>
+      <Current>1</Current>
+      <Visible>1</Visible>
+      <Relations>sequence|table|16396|16398|1
+</Relations>
+    </database>
+    <database id="3" parent="1" name="postgres">
+      <ObjectId>12141</ObjectId>
+      <Comment>default administrative connection database</Comment>
+      <StateNumber>681</StateNumber>
+      <Owner>usr_myerp</Owner>
+    </database>
+    <role id="4" parent="1" name="usr_myerp">
+      <ObjectId>10</ObjectId>
+      <SuperRole>1</SuperRole>
+      <Inherit>1</Inherit>
+      <CreateRole>1</CreateRole>
+      <CreateDb>1</CreateDb>
+      <CanLogin>1</CanLogin>
+      <Replication>1</Replication>
+      <ConnectionLimit>-1</ConnectionLimit>
+    </role>
+    <schema id="5" parent="2" name="information_schema">
+      <ObjectId>11591</ObjectId>
+      <StateNumber>572</StateNumber>
+      <Owner>usr_myerp</Owner>
+    </schema>
+    <schema id="6" parent="2" name="myerp">
+      <ObjectId>16385</ObjectId>
+      <StateNumber>684</StateNumber>
+      <Owner>usr_myerp</Owner>
+    </schema>
+    <schema id="7" parent="2" name="pg_catalog">
+      <ObjectId>11</ObjectId>
+      <Comment>system catalog schema</Comment>
+      <StateNumber>569</StateNumber>
+      <Owner>usr_myerp</Owner>
+    </schema>
+    <schema id="8" parent="2" name="pg_temp_1">
+      <ObjectId>11320</ObjectId>
+      <StateNumber>23</StateNumber>
+      <Owner>usr_myerp</Owner>
+    </schema>
+    <schema id="9" parent="2" name="pg_toast">
+      <ObjectId>99</ObjectId>
+      <Comment>reserved schema for TOAST tables</Comment>
+      <StateNumber>1</StateNumber>
+      <Owner>usr_myerp</Owner>
+    </schema>
+    <schema id="10" parent="2" name="pg_toast_temp_1">
+      <ObjectId>11321</ObjectId>
+      <StateNumber>23</StateNumber>
+      <Owner>usr_myerp</Owner>
+    </schema>
+    <schema id="11" parent="2" name="public">
+      <ObjectId>2200</ObjectId>
+      <Comment>standard public schema</Comment>
+      <StateNumber>570</StateNumber>
+      <Owner>usr_myerp</Owner>
+      <IntrospectionTimestamp>2019-09-06.09:20:01.886</IntrospectionTimestamp>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <access-method id="12" parent="2" name="btree">
+      <ObjectId>403</ObjectId>
+      <Comment>b-tree index access method</Comment>
+      <StateNumber>1</StateNumber>
+    </access-method>
+    <access-method id="13" parent="2" name="hash">
+      <ObjectId>405</ObjectId>
+      <Comment>hash index access method</Comment>
+      <StateNumber>1</StateNumber>
+    </access-method>
+    <access-method id="14" parent="2" name="gist">
+      <ObjectId>783</ObjectId>
+      <Comment>GiST index access method</Comment>
+      <StateNumber>1</StateNumber>
+    </access-method>
+    <access-method id="15" parent="2" name="gin">
+      <ObjectId>2742</ObjectId>
+      <Comment>GIN index access method</Comment>
+      <StateNumber>1</StateNumber>
+    </access-method>
+    <access-method id="16" parent="2" name="spgist">
+      <ObjectId>4000</ObjectId>
+      <Comment>SP-GiST index access method</Comment>
+      <StateNumber>1</StateNumber>
+    </access-method>
+    <extension id="17" parent="2" name="plpgsql">
+      <ObjectId>11861</ObjectId>
+      <Comment>PL/pgSQL procedural language</Comment>
+      <StateNumber>575</StateNumber>
+      <Version>1.0</Version>
+      <SchemaName>pg_catalog</SchemaName>
+      <SchemaId>11</SchemaId>
+    </extension>
+  </database-model>
+</dataSource>

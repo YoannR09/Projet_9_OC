@@ -5,9 +5,9 @@ import java.math.BigDecimal;
 
 import java.util.Date;
 
-import com.dummy.myerp.business.impl.AbstractBusinessManager;
-import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import com.dummy.myerp.technical.exception.NotFoundException;
+
+import com.dummy.myerp.testbusiness.business.BusinessTestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,21 +17,21 @@ import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.mockito.*;
 
 
 public class ComptabiliteManagerImplTest {
 
-    private ComptabiliteManagerImpl manager = new ComptabiliteManagerImpl();
+    private ComptabiliteManagerImpl manager;
 
     private EcritureComptable vEcritureComptable;
-
-    @Mock
-    private AbstractBusinessManager abstractBusinessManager;
 
 
     @Before
     public void setUp(){
+        manager = new ComptabiliteManagerImpl();
         MockitoAnnotations.initMocks(this);
     }
 
@@ -39,41 +39,37 @@ public class ComptabiliteManagerImplTest {
     @Test
     public void checkEcritureComptableUnit() throws Exception {
 
-        EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.setReference("BQ-2019/00001");
+        vEcritureComptable.setReference("AC-2019/00001");
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
                 null, null,
                 new BigDecimal(123)));
-        manager.checkEcritureComptableUnit(vEcritureComptable);
 
-        Mockito.verify(manager).checkEcritureComptableUnit(vEcritureComptable);
+        manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
-    @Test(expected = FunctionalException.class)
-    public void checkEcritureComptableUnitViolation() throws Exception {
-
-        manager = new ComptabiliteManagerImpl();
-
-        EcritureComptable vEcritureComptable;
+    @Test
+    public void checkEcritureComptableUnitViolation(){
         vEcritureComptable = new EcritureComptable();
-        manager.checkEcritureComptableUnit(vEcritureComptable);
 
-        Mockito.verify(manager).checkEcritureComptableUnit(vEcritureComptable);
+        assertThrows(new FunctionalException("L'écriture comptable n'est pas équilibrée.").getClass(), () -> manager.checkEcritureComptableUnit(vEcritureComptable));
     }
 
-    @Test(expected = FunctionalException.class)
-    public void checkEcritureComptableUnitRG2() throws Exception {
 
-        manager = new ComptabiliteManagerImpl();
 
-        EcritureComptable vEcritureComptable;
+
+    /**
+     * Test si l'écriture comptable est équilibrée
+     */
+    @Test
+    public void checkEcritureComptableUnitRG2(){
+
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
@@ -86,45 +82,70 @@ public class ComptabiliteManagerImplTest {
                 null, new BigDecimal(123),
                 null));
 
-        manager.checkEcritureComptableUnit(vEcritureComptable);
-
-        Mockito.verify(manager).checkEcritureComptableUnit(vEcritureComptable);
-    }
-
-    @Test(expected = FunctionalException.class)
-    public void checkEcritureComptableUnitRG3() throws FunctionalException {
-
-        manager = new ComptabiliteManagerImpl();
-
-        EcritureComptable vEcritureComptable;
-        vEcritureComptable = new EcritureComptable();
-
-        manager.checkEcritureComptableUnit(vEcritureComptable);
-
-        Mockito.verify(manager).checkEcritureComptableUnit(vEcritureComptable);
+        assertThrows(new FunctionalException("L'écriture comptable n'est pas équilibrée.").getClass(), () -> manager.checkEcritureComptableUnit(vEcritureComptable));
     }
 
     @Test
-    public void checkEcritureComptableContextViolation() throws FunctionalException {
+    public void checkEcritureComptableUnitRG3(){
+
+        vEcritureComptable = Mockito.mock(EcritureComptable.class);
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setDate(new Date());
+        vEcritureComptable.setLibelle("Libelle");
+        vEcritureComptable.setReference("BQ-2019/00001");
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                null, new BigDecimal(123),
+                null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                null, new BigDecimal(123),
+                null));
+
+        assertThrows(new FunctionalException("test").getClass(), () -> manager.checkEcritureComptableUnit(vEcritureComptable));
+    }
+
+    @Test
+    public void checkEcritureComptableUnitRG5(){
 
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.setReference("");
+        vEcritureComptable.setReference("AC-2015/00001");
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
-                null));
-        vEcritureComptable.setId(null);
+                null, null,
+                new BigDecimal(123)));
 
-        manager.checkEcritureComptableContext(vEcritureComptable);
+        assertThrows(new FunctionalException("L'année dans la référence doit correspondre à la date de l'écriture.").getClass(), () -> manager.checkEcritureComptableUnit(vEcritureComptable));
 
-        Mockito.verify(manager).checkEcritureComptableContext(vEcritureComptable);
+        vEcritureComptable.setReference("BQ-2019/00001");
+
+        assertThrows(new FunctionalException("Le code journal dans la référence doit correspondre à celui du code journal").getClass(), () -> manager.checkEcritureComptableUnit(vEcritureComptable));
     }
 
+    @Test
+    public void checkEcritureComptableUnitRG6(){
+
+        vEcritureComptable = new EcritureComptable();
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setDate(new Date());
+        vEcritureComptable.setLibelle("Libelle");
+        vEcritureComptable.setReference("AC-2015/00001");
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                null, new BigDecimal(123),
+                null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                null, null,
+                new BigDecimal(123)));
+
+        assertThrows(new FunctionalException("L'année dans la référence doit correspondre à la date de l'écriture.").getClass(), () -> manager.checkEcritureComptableUnit(vEcritureComptable));
+
+        vEcritureComptable.setReference("BQ-2019/00001");
+
+        assertThrows(new FunctionalException("Le code journal dans la référence doit correspondre à celui du code journal").getClass(), () -> manager.checkEcritureComptableUnit(vEcritureComptable));
+    }
 
     @Test
     public void checkEcritureComptable() throws FunctionalException{
@@ -133,15 +154,16 @@ public class ComptabiliteManagerImplTest {
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.setReference("BQ-2019/00001");
+        vEcritureComptable.setReference("AC-2019/00001");
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
-                null));
+                null, null,
+                new BigDecimal(123)));
 
         manager.checkEcritureComptable(vEcritureComptable);
+
 
         Mockito.verify(manager).checkEcritureComptable(vEcritureComptable);
     }
@@ -149,14 +171,15 @@ public class ComptabiliteManagerImplTest {
     @Test
     public void deleteEcritureComptable() {
 
+        manager = Mockito.mock(ComptabiliteManagerImpl.class);
+
         manager.deleteEcritureComptable(1);
 
         Mockito.verify(manager).deleteEcritureComptable(1);
-
     }
 
     @Test
-    public void updateEcritureComptable() throws FunctionalException {
+    public void updateEcritureComptable() {
 
         manager = Mockito.mock(ComptabiliteManagerImpl.class);
 
@@ -170,7 +193,7 @@ public class ComptabiliteManagerImplTest {
     @Test
     public void insertEcritureComptable() throws FunctionalException, NotFoundException {
 
-        ComptabiliteManagerImpl manager = new ComptabiliteManagerImpl();
+        manager = Mockito.mock(ComptabiliteManagerImpl.class);
 
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
@@ -184,12 +207,9 @@ public class ComptabiliteManagerImplTest {
                 null, null,
                 new BigDecimal(123)));
 
-
-        Mockito.when(abstractBusinessManager.getDaoProxy()).thenReturn(new FakeDaoProxy());
-
-        Mockito.when(abstractBusinessManager.getDaoProxy().getComptabiliteDao().getEcritureComptableByRef(vEcritureComptable.getReference())).thenReturn(new FakeDaoProxy().getComptabiliteDao().getEcritureComptableByRef(vEcritureComptable.getReference()));
-
         ArgumentCaptor<EcritureComptable> ecritureComptableArgumentCaptor = ArgumentCaptor.forClass(EcritureComptable.class);
+
+        Mockito.when(manager.getDaoProxy().getComptabiliteDao().getEcritureComptableByRef(vEcritureComptable.getReference())).thenReturn(vEcritureComptable);
 
         manager.insertEcritureComptable(vEcritureComptable);
 

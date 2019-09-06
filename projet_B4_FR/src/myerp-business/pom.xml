@@ -83,6 +83,11 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+
         <!-- ===== Database (pour les tests) ===== -->
         <!-- Pool de connexion -->
         <dependency>
@@ -94,6 +99,12 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.5.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -108,7 +119,7 @@
             <id>test-business</id>
             <build>
                 <plugins>
-                    <!-- Ajout du répertoire src/test-business/java en tant que source de test du module -->
+                    <!-- Ajout du répertoire src/test-testbusiness/java en tant que source de test du module -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>

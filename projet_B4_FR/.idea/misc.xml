@@ -3,6 +3,10 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../Projet_9_OC/projet_B4_FR/doc/javadoc" />
+    <option name="OPTION_SCOPE" value="private" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
