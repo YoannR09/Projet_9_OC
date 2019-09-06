@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.*;
 
 
-public class ComptabiliteManagerImplTest {
+public class ComptabiliteManagerImplTest extends BusinessTestCase {
 
     private ComptabiliteManagerImpl manager;
 
@@ -163,9 +163,6 @@ public class ComptabiliteManagerImplTest {
                 new BigDecimal(123)));
 
         manager.checkEcritureComptable(vEcritureComptable);
-
-
-        Mockito.verify(manager).checkEcritureComptable(vEcritureComptable);
     }
 
     @Test
@@ -191,9 +188,7 @@ public class ComptabiliteManagerImplTest {
 
 
     @Test
-    public void insertEcritureComptable() throws FunctionalException, NotFoundException {
-
-        manager = Mockito.mock(ComptabiliteManagerImpl.class);
+    public void insertEcritureComptable() throws FunctionalException{
 
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
@@ -207,14 +202,6 @@ public class ComptabiliteManagerImplTest {
                 null, null,
                 new BigDecimal(123)));
 
-        ArgumentCaptor<EcritureComptable> ecritureComptableArgumentCaptor = ArgumentCaptor.forClass(EcritureComptable.class);
-
-        Mockito.when(manager.getDaoProxy().getComptabiliteDao().getEcritureComptableByRef(vEcritureComptable.getReference())).thenReturn(vEcritureComptable);
-
         manager.insertEcritureComptable(vEcritureComptable);
-
-        Mockito.verify(manager).insertEcritureComptable(ecritureComptableArgumentCaptor.capture());
-
-        Assert.assertEquals(vEcritureComptable,ecritureComptableArgumentCaptor.getValue());
     }
 }

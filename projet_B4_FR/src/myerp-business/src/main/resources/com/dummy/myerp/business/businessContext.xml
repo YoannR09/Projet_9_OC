@@ -3,18 +3,15 @@
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
-
     <!-- ====================   Business-Proxy   ==================== -->
 
     <!-- BusinessProxy -->
     <bean id="businessProxy"
           class="com.dummy.myerp.business.impl.BusinessProxyImpl"
-          scope="singleton"
           factory-method="getInstance">
         <constructor-arg ref="daoProxy"/>
         <constructor-arg ref="transactionManager"/>
     </bean>
-
 
     <!-- ========== Transaction Managers ========== -->
     <import resource="transactionContext.xml"/>

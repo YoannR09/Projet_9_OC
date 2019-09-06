@@ -45,9 +45,6 @@ public class CompteComptableRMTest{
                     result.setNumero(actual.getNumero());
                     result.setLibelle(actual.getLibelle());
 
-                    Assert.assertEquals(actual.getNumero(),numero);
-                    Assert.assertEquals(actual.getLibelle(),libelle);
-
                     return result;
                 });
 

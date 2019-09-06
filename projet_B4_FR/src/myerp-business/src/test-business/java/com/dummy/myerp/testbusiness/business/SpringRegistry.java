@@ -16,10 +16,8 @@ public final class SpringRegistry {
     /** Logger Log4j pour la classe */
     private static final Logger LOGGER = LogManager.getLogger(SpringRegistry.class);
 
-
     /** Instance unique de la classe (design pattern Singleton) */
     private static final SpringRegistry INSTANCE = new SpringRegistry();
-
 
     /** Nom des fichiers de contexte de l'application */
     private static final String CONTEXT_APPLI_LOCATION = "classpath:/bootstrapContext.xml";
@@ -27,10 +25,7 @@ public final class SpringRegistry {
     /** Le context spring de l'application */
     private ApplicationContext contextAppli;
 
-
     // ==================== ID des Beans Spring ====================
-
-
     /**
      * Constructeur.
      */
@@ -41,6 +36,7 @@ public final class SpringRegistry {
         SpringRegistry.LOGGER.debug("[FIN] SpringRegistry() - Initialisation du contexte Spring");
     }
 
+
     /**
      * Renvoie l'instance unique de la classe (design pattern Singleton).
      *
@@ -50,15 +46,19 @@ public final class SpringRegistry {
         return SpringRegistry.INSTANCE;
     }
 
+
+
     /**
      * Initialise et charge le contexte Spring
      *
      * @return ApplicationContext
      */
+
     public static final ApplicationContext init() {
         // le fait d'appeler cette méthode, déclanche l'appel des initialisation static et donc le chargement du context
         return getInstance().contextAppli;
     }
+
 
     /**
      * Récupération d'un bean via Spring.
@@ -66,6 +66,7 @@ public final class SpringRegistry {
      * @param pBeanId ID du bean
      * @return Object
      */
+
     protected static Object getBean(String pBeanId) {
         SpringRegistry.LOGGER.debug("[DEBUT] SpringRegistry.getBean() - Bean ID : " + pBeanId);
         Object vBean = SpringRegistry.getInstance().contextAppli.getBean(pBeanId);
@@ -73,16 +74,14 @@ public final class SpringRegistry {
         return vBean;
     }
 
-
     /**
      * Renvoie l'instance de {@link BusinessProxy} de l'application
      *
      * @return {@link BusinessProxy}
      */
     public static BusinessProxy getBusinessProxy() {
-        return (BusinessProxy) SpringRegistry.getBean("BusinessProxy");
+        return (BusinessProxy) SpringRegistry.getBean("businessProxy");
     }
-
 
     /**
      * Renvoie l'instance de {@link TransactionManager} de l'application
@@ -90,6 +89,6 @@ public final class SpringRegistry {
      * @return {@link TransactionManager}
      */
     public static TransactionManager getTransactionManager() {
-        return (TransactionManager) SpringRegistry.getBean("TransactionManager");
+        return (TransactionManager) SpringRegistry.getBean("transactionManager");
     }
 }
