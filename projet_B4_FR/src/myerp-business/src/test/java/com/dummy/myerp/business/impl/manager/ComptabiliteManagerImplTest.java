@@ -3,8 +3,10 @@ package com.dummy.myerp.business.impl.manager;
 
 import java.math.BigDecimal;
 
+import java.sql.ResultSet;
 import java.util.Date;
 
+import com.dummy.myerp.business.impl.AbstractBusinessManager;
 import com.dummy.myerp.technical.exception.NotFoundException;
 
 import com.dummy.myerp.testbusiness.business.BusinessTestCase;
@@ -20,6 +22,9 @@ import com.dummy.myerp.technical.exception.FunctionalException;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.mockito.*;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.springframework.jdbc.core.RowMapper;
 
 
 public class ComptabiliteManagerImplTest extends BusinessTestCase {
@@ -201,6 +206,7 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, null,
                 new BigDecimal(123)));
+
 
         manager.insertEcritureComptable(vEcritureComptable);
     }
