@@ -1,7 +1,9 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SequenceEcritureComptableTest {
 
@@ -10,7 +12,7 @@ public class SequenceEcritureComptableTest {
         Integer annee = new Integer(2019);
         SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable(annee,null);
 
-        Assert.assertEquals(annee,sequenceEcritureComptable.getAnnee());
+        assertEquals(annee,sequenceEcritureComptable.getAnnee());
     }
 
     @Test
@@ -19,7 +21,7 @@ public class SequenceEcritureComptableTest {
         SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
         sequenceEcritureComptable.setAnnee(annee);
 
-        Assert.assertEquals(annee,sequenceEcritureComptable.getAnnee());
+        assertEquals(annee,sequenceEcritureComptable.getAnnee());
     }
 
     @Test
@@ -27,7 +29,7 @@ public class SequenceEcritureComptableTest {
         Integer derniereValeur = new Integer(10);
         SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable(null,derniereValeur);
 
-        Assert.assertEquals(derniereValeur,sequenceEcritureComptable.getDerniereValeur());
+        assertEquals(derniereValeur,sequenceEcritureComptable.getDerniereValeur());
     }
 
     @Test
@@ -36,7 +38,7 @@ public class SequenceEcritureComptableTest {
         SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
         sequenceEcritureComptable.setDerniereValeur(derniereValeur);
 
-        Assert.assertEquals(derniereValeur,sequenceEcritureComptable.getDerniereValeur());
+        assertEquals(derniereValeur,sequenceEcritureComptable.getDerniereValeur());
     }
 
     @Test
@@ -45,7 +47,7 @@ public class SequenceEcritureComptableTest {
         SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
         sequenceEcritureComptable.setJournalCode(journalComptable.getCode());
 
-        Assert.assertEquals(sequenceEcritureComptable.getJournalCode(),"AC");
+        assertEquals(sequenceEcritureComptable.getJournalCode(),"AC");
     }
 
     @Test
@@ -54,6 +56,6 @@ public class SequenceEcritureComptableTest {
         SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
         sequenceEcritureComptable.setJournalCode(journalComptable.getCode());
 
-        Assert.assertEquals(sequenceEcritureComptable.getJournalCode(),"AC");
+        assertEquals(sequenceEcritureComptable.getJournalCode(),"AC");
     }
 }

@@ -7,13 +7,14 @@ import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 
 import com.dummy.myerp.testconsumer.consumer.ConsumerTestCase;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import org.mockito.stubbing.Answer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 import java.sql.ResultSet;
@@ -59,9 +60,9 @@ public class EcritureComptableRMTest extends ConsumerTestCase {
 
         EcritureComptable ecritureComptable = template.queryForObject("SELECT * FROM ecriture_comptable WHERE id = 4",rm);
 
-        Assert.assertEquals(ecritureComptable.getLibelle(),"libelle");
-        Assert.assertEquals(ecritureComptable.getId(),new Integer(4));
-        Assert.assertEquals(ecritureComptable.getReference(),"BQ-2019/00001");
-        Assert.assertEquals(ecritureComptable.getJournal().toString(),new JournalComptable("AC", "Achat").toString());
+        assertEquals(ecritureComptable.getLibelle(),"libelle");
+        assertEquals(ecritureComptable.getId(),new Integer(4));
+        assertEquals(ecritureComptable.getReference(),"BQ-2019/00001");
+        assertEquals(ecritureComptable.getJournal().toString(),new JournalComptable("AC", "Achat").toString());
     }
 }

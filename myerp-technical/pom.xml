@@ -98,12 +98,14 @@
             <artifactId>validation-api</artifactId>
         </dependency>
 
-
         <!-- ========== Test Dependencies ========== -->
-        <!-- ===== Tests ===== -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
 

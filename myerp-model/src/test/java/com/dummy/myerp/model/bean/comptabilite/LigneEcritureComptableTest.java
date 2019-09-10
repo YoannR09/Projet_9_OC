@@ -1,7 +1,8 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
@@ -13,7 +14,7 @@ public class LigneEcritureComptableTest {
         LigneEcritureComptable ligneEcritureComptable = new LigneEcritureComptable(compteComptable,null,null,null);
         ligneEcritureComptable.setCompteComptable(compteComptable);
 
-        Assert.assertEquals(compteComptable,ligneEcritureComptable.getCompteComptable());
+        assertEquals(compteComptable,ligneEcritureComptable.getCompteComptable());
     }
 
     @Test
@@ -22,7 +23,7 @@ public class LigneEcritureComptableTest {
         CompteComptable compteComptable = new CompteComptable();
         ligneEcritureComptable.setCompteComptable(compteComptable);
 
-        Assert.assertEquals(compteComptable,ligneEcritureComptable.getCompteComptable());
+        assertEquals(compteComptable,ligneEcritureComptable.getCompteComptable());
     }
 
     @Test
@@ -30,7 +31,7 @@ public class LigneEcritureComptableTest {
         String libelle = "libelle";
         LigneEcritureComptable ligneEcritureComptable = new LigneEcritureComptable(null,libelle,null,null);
 
-        Assert.assertEquals(libelle,ligneEcritureComptable.getLibelle());
+        assertEquals(libelle,ligneEcritureComptable.getLibelle());
     }
 
     @Test
@@ -39,7 +40,7 @@ public class LigneEcritureComptableTest {
         LigneEcritureComptable ligneEcritureComptable = new LigneEcritureComptable();
         ligneEcritureComptable.setLibelle(libelle);
 
-        Assert.assertEquals(libelle,ligneEcritureComptable.getLibelle());
+        assertEquals(libelle,ligneEcritureComptable.getLibelle());
     }
 
     @Test
@@ -47,7 +48,7 @@ public class LigneEcritureComptableTest {
         BigDecimal debit = new BigDecimal(1.00);
         LigneEcritureComptable ligneEcritureComptable = new LigneEcritureComptable(null,null,debit,null);
 
-        Assert.assertEquals(debit,ligneEcritureComptable.getDebit());
+        assertEquals(debit,ligneEcritureComptable.getDebit());
     }
 
     @Test
@@ -56,7 +57,7 @@ public class LigneEcritureComptableTest {
         LigneEcritureComptable ligneEcritureComptable = new LigneEcritureComptable();
         ligneEcritureComptable.setDebit(debit);
 
-        Assert.assertEquals(debit,ligneEcritureComptable.getDebit());
+        assertEquals(debit,ligneEcritureComptable.getDebit());
     }
 
     @Test
@@ -64,7 +65,7 @@ public class LigneEcritureComptableTest {
         BigDecimal credit = new BigDecimal(1.00);
         LigneEcritureComptable ligneEcritureComptable = new LigneEcritureComptable(null,null,null,credit);
 
-        Assert.assertEquals(credit,ligneEcritureComptable.getCredit());
+        assertEquals(credit,ligneEcritureComptable.getCredit());
     }
 
     @Test
@@ -73,6 +74,6 @@ public class LigneEcritureComptableTest {
         LigneEcritureComptable ligneEcritureComptable = new LigneEcritureComptable();
         ligneEcritureComptable.setCredit(credit);
 
-        Assert.assertEquals(credit,ligneEcritureComptable.getCredit());
+        assertEquals(credit,ligneEcritureComptable.getCredit());
     }
 }

@@ -1,7 +1,7 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class CompteComptableTest {
         Integer numero = new Integer(1);
         CompteComptable compteComptable = new CompteComptable(numero,"libelle");
 
-        Assert.assertEquals(numero,compteComptable.getNumero());
+        assertEquals(numero,compteComptable.getNumero());
     }
 
     @Test
@@ -24,7 +24,7 @@ public class CompteComptableTest {
         CompteComptable compteComptable = new CompteComptable();
         compteComptable.setNumero(numero);
 
-        Assert.assertEquals(numero,compteComptable.getNumero());
+        assertEquals(numero,compteComptable.getNumero());
     }
 
     @Test
@@ -32,7 +32,7 @@ public class CompteComptableTest {
         String libelle = "libelle";
         CompteComptable compteComptable = new CompteComptable(1,libelle);
 
-        Assert.assertEquals(libelle,compteComptable.getLibelle());
+        assertEquals(libelle,compteComptable.getLibelle());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class CompteComptableTest {
         CompteComptable compteComptable = new CompteComptable();
         compteComptable.setLibelle(libelle);
 
-        Assert.assertEquals(libelle,compteComptable.getLibelle());
+        assertEquals(libelle,compteComptable.getLibelle());
     }
 
     @Test
@@ -54,7 +54,7 @@ public class CompteComptableTest {
         vList.add(new CompteComptable(new Integer(1),"libelle"));
         vList.add(new CompteComptable(new Integer(2),"libelle"));
 
-        Assert.assertEquals(compteComptable,compteComptable.getByNumero(vList,7));
+        assertEquals(compteComptable,compteComptable.getByNumero(vList,7));
     }
 
 

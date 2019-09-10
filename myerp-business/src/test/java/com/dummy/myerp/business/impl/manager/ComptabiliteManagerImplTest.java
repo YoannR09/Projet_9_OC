@@ -1,30 +1,22 @@
 package com.dummy.myerp.business.impl.manager;
 
 
-import java.math.BigDecimal;
-
-import java.sql.ResultSet;
-import java.util.Date;
-
-import com.dummy.myerp.business.impl.AbstractBusinessManager;
-import com.dummy.myerp.technical.exception.NotFoundException;
-
-import com.dummy.myerp.testbusiness.business.BusinessTestCase;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
+import com.dummy.myerp.testbusiness.business.BusinessTestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.transaction.TransactionStatus;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.mockito.*;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.springframework.jdbc.core.RowMapper;
 
 
 public class ComptabiliteManagerImplTest extends BusinessTestCase {
@@ -34,10 +26,28 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
     private EcritureComptable vEcritureComptable;
 
 
-    @Before
+    @BeforeEach
     public void setUp(){
         manager = new ComptabiliteManagerImpl();
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void getListCompteComptable() {
+        /*
+        AbstractBusinessManager abm = spy(AbstractBusinessManager.class);
+
+        manager = spy(new ComptabiliteManagerImpl());
+
+        FakeComptabiblieDao fakeDao = new FakeComptabiblieDao();
+
+        when(abm.getDaoProxy().getComptabiliteDao().getListCompteComptable()).thenReturn(fakeDao.getListCompteComptable());
+
+        when(manager.getDaoProxy().getComptabiliteDao().getListCompteComptable()).thenReturn(fakeDao.getListCompteComptable());
+
+        List<CompteComptable> vList = manager.getDaoProxy().getComptabiliteDao().getListCompteComptable();
+        System.out.println(vList);
+        */
     }
 
 
@@ -159,7 +169,7 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.setReference("AC-2019/00001");
+        vEcritureComptable.setReference("AC-2019/02201");
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
@@ -193,21 +203,26 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
 
 
     @Test
-    public void insertEcritureComptable() throws FunctionalException{
+    public void insertEcritureComptable() throws FunctionalException {
 
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.setReference("BQ-2019/00001");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+        vEcritureComptable.setReference("AC-2019/00001");
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(401),
                 null, new BigDecimal(123),
                 null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(401),
                 null, null,
                 new BigDecimal(123)));
 
-
+        TransactionStatus transactionStatus = getTransactionManager().beginTransactionMyERP();
+        assertThrows(new FunctionalException("Une autre écriture comptable existe déjà avec la même référence.").getClass(), () -> manager.insertEcritureComptable(vEcritureComptable));
+        vEcritureComptable.setReference("BC-2019/01532");
+        assertThrows(new FunctionalException("Le code journal dans la référence doit correspondre à celui du code journal.").getClass(), () -> manager.insertEcritureComptable(vEcritureComptable));
+        vEcritureComptable.setReference("AC-2019/01532");
         manager.insertEcritureComptable(vEcritureComptable);
+        getTransactionManager().rollbackMyERP(transactionStatus);
     }
 }
