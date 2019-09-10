@@ -1,13 +1,10 @@
 package com.dummy.myerp.consumer.dao.impl.db.rowmapper;
 
-import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.CompteComptableRM;
+
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.LigneEcritureComptableRM;
-import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.testconsumer.consumer.ConsumerTestCase;
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Mock;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +12,8 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LigneEcritureComptableRMTest extends ConsumerTestCase {
 
@@ -53,9 +52,9 @@ public class LigneEcritureComptableRMTest extends ConsumerTestCase {
 
         LigneEcritureComptable ligneEcritureComptable = template.queryForObject("SELECT * FROM ligne_ecriture_comptable WHERE id = -3",rm);
 
-        Assert.assertEquals(ligneEcritureComptable.getLibelle(),"libelle");
-        Assert.assertEquals(ligneEcritureComptable.getCredit(), new BigDecimal(110.00));
-        Assert.assertEquals(ligneEcritureComptable.getDebit(), new BigDecimal(110.00));
-        Assert.assertEquals(ligneEcritureComptable.getCompteComptable().getNumero(),new Integer(401));
+        assertEquals(ligneEcritureComptable.getLibelle(),"libelle");
+        assertEquals(ligneEcritureComptable.getCredit(), new BigDecimal(110.00));
+        assertEquals(ligneEcritureComptable.getDebit(), new BigDecimal(110.00));
+        assertEquals(ligneEcritureComptable.getCompteComptable().getNumero(),new Integer(401));
     }
 }

@@ -5,11 +5,12 @@ import java.math.BigDecimal;
 
 import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 public class EcritureComptableTest {
@@ -33,88 +34,88 @@ public class EcritureComptableTest {
     @Test
     public void isEquilibree() {
 
-        Assert.assertTrue(vEcriture.toString(), vEcriture.isEquilibree());
+        assertTrue(vEcriture.isEquilibree(), vEcriture.toString());
     }
 
     @Test
     public void getTotalDebit() {
 
-        Assert.assertEquals(new BigDecimal("341"),vEcriture.getTotalDebit());
+        assertEquals(new BigDecimal("341"),vEcriture.getTotalDebit());
     }
 
     @Test
     public void getTotalCredit() {
 
-        Assert.assertEquals(new BigDecimal("341"),vEcriture.getTotalCredit());
+        assertEquals(new BigDecimal("341"),vEcriture.getTotalCredit());
     }
 
     @Test
     public void getId() {
 
-        Assert.assertTrue(1 == vEcriture.getId());
+        assertTrue(1 == vEcriture.getId());
     }
 
     @Test
     public void setId() {
 
-        Assert.assertNotNull(vEcriture.getId());
+        assertNotNull(vEcriture.getId());
     }
 
     @Test
     public void getJournal() {
 
-        Assert.assertEquals(journal,vEcriture.getJournal());
+        assertEquals(journal,vEcriture.getJournal());
     }
 
     @Test
     public void setJournal() {
 
-        Assert.assertNotNull(vEcriture.getJournal());
+        assertNotNull(vEcriture.getJournal());
     }
 
     @Test
     public void getReference() {
 
-        Assert.assertEquals("reference",vEcriture.getReference());
+        assertEquals("reference",vEcriture.getReference());
     }
 
     @Test
     public void setReference() {
 
-        Assert.assertNotNull(vEcriture.getReference());
+        assertNotNull(vEcriture.getReference());
     }
 
     @Test
     public void getDate() {
 
-        Assert.assertEquals(date,vEcriture.getDate());
+        assertEquals(date,vEcriture.getDate());
     }
 
     @Test
     public void setDate() {
 
-        Assert.assertNotNull(vEcriture.getDate());
+        assertNotNull(vEcriture.getDate());
     }
 
     @Test
     public void getLibelle() {
 
-        Assert.assertEquals("Equilibrée",vEcriture.getLibelle());
+        assertEquals("Equilibrée",vEcriture.getLibelle());
     }
 
     @Test
     public void setLibelle() {
 
-        Assert.assertNotNull(vEcriture.getLibelle());
+        assertNotNull(vEcriture.getLibelle());
     }
 
     @Test
     public void getListLigneEcriture() {
 
-        Assert.assertNotNull(vEcriture.getListLigneEcriture());
+        assertNotNull(vEcriture.getListLigneEcriture());
     }
 
-    @Before
+    @BeforeEach
     public void initEcritureComptable(){
         vEcriture.setId(new Integer(1));
         vEcriture.setDate(date);

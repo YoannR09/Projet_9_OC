@@ -2,27 +2,21 @@ package com.dummy.myerp.consumer.dao.impl.db.dao;
 
 
 import com.dummy.myerp.consumer.dao.impl.cache.JournalComptableDaoCache;
-import com.dummy.myerp.consumer.db.AbstractDbConsumer;
-import com.dummy.myerp.model.bean.comptabilite.*;
-
-
+import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
+import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
+import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.testconsumer.consumer.ConsumerTestCase;
 import com.dummy.myerp.testconsumer.consumer.SpringRegistry;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-
 
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ComptabiliteDaoImplTest extends ConsumerTestCase {
 
@@ -34,9 +28,9 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
 
     @Test
     public void  getInstance() {
-        Assert.assertNotNull(comptabiliteDao.getInstance());
+        assertNotNull(comptabiliteDao.getInstance());
         comptabiliteDao = comptabiliteDao.getInstance();
-        Assert.assertEquals(comptabiliteDao,comptabiliteDao.getInstance());
+        assertEquals(comptabiliteDao,comptabiliteDao.getInstance());
     }
 
     @Test
@@ -52,10 +46,10 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
         try {
             List<CompteComptable> vList = comptabiliteDao.getListCompteComptable();
 
-            Assert.assertNotNull(vList);
+            assertNotNull(vList);
         }catch (Exception e){
             LOGGER.error(e);
-            Assert.assertNull(e);
+            assertNull(e);
         }
     }
 
@@ -68,10 +62,10 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
 
             List<JournalComptable> vList = comptabiliteDao.getListJournalComptable();
 
-            Assert.assertNotNull(vList);
+            assertNotNull(vList);
         }catch (Exception e){
             LOGGER.error(e);
-            Assert.assertNull(e);
+            assertNull(e);
         }
     }
 
@@ -83,10 +77,10 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
         try {
             List<EcritureComptable> vList = comptabiliteDao.getListEcritureComptable();
 
-            Assert.assertNotNull(vList);
+            assertNotNull(vList);
         }catch (Exception e){
             LOGGER.error(e);
-            Assert.assertNull(e);
+            assertNull(e);
         }
     }
 
@@ -98,11 +92,11 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
         try {
             ecritureComptable = comptabiliteDao.getEcritureComptable(-2);
 
-            Assert.assertNotNull(ecritureComptable);
+            assertNotNull(ecritureComptable);
             assertThrows(new Exception().getClass(), () -> comptabiliteDao.getEcritureComptable(9999));
         }catch (Exception e){
             LOGGER.error(e);
-            Assert.assertNull(e);
+            assertNull(e);
         }
     }
 
@@ -115,11 +109,11 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
             List<EcritureComptable> vList = comptabiliteDao.getListEcritureComptable();
 
             ecritureComptable = comptabiliteDao.getEcritureComptableByRef(vList.get(2).getReference());
-            Assert.assertNotNull(ecritureComptable);
+            assertNotNull(ecritureComptable);
             assertThrows(new Exception().getClass(), () -> comptabiliteDao.getEcritureComptableByRef("PC"));
         }catch (Exception e){
             LOGGER.error(e);
-            Assert.assertNull(e);
+            assertNull(e);
         }
     }
 
@@ -132,11 +126,11 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
             EcritureComptable ecritureComptableTest = new EcritureComptable();
             ecritureComptableTest.setId(-2);
             comptabiliteDao.loadListLigneEcriture(ecritureComptableTest);
-            Assert.assertNotNull(ecritureComptableTest.getListLigneEcriture());
-            Assert.assertEquals(comptabiliteDao.getEcritureComptable(-2).getListLigneEcriture().toString(),ecritureComptableTest.getListLigneEcriture().toString());
+            assertNotNull(ecritureComptableTest.getListLigneEcriture());
+            assertEquals(comptabiliteDao.getEcritureComptable(-2).getListLigneEcriture().toString(),ecritureComptableTest.getListLigneEcriture().toString());
         }catch (Exception e){
             LOGGER.error(e);
-            Assert.assertNull(e);
+            assertNull(e);
         }
     }
 
@@ -254,7 +248,7 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void setSQLgetListCompteComptable() throws NoSuchFieldException, IllegalAccessException {
         final Field field = comptabiliteDao.getClass().getDeclaredField("SQLgetListCompteComptable");
         field.setAccessible(true);
-        Assert.assertEquals(field.get(sqlRequet),"\n" +
+        assertEquals(field.get(sqlRequet),"\n" +
                 "                SELECT * FROM myerp.compte_comptable\n" +
                 "            ");
     }
@@ -263,7 +257,7 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void setSQLgetListJournalComptable() throws IllegalAccessException, NoSuchFieldException {
         final Field field = comptabiliteDao.getClass().getDeclaredField("SQLgetListJournalComptable");
         field.setAccessible(true);
-        Assert.assertEquals(field.get(sqlRequet),"\n" +
+        assertEquals(field.get(sqlRequet),"\n" +
                 "                SELECT * FROM myerp.journal_comptable\n" +
                 "            ");
     }
@@ -271,7 +265,7 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void setSQLgetListEcritureComptable() throws IllegalAccessException, NoSuchFieldException{
         final Field field = comptabiliteDao.getClass().getDeclaredField("SQLgetListEcritureComptable");
         field.setAccessible(true);
-        Assert.assertEquals(field.get(sqlRequet),"\n" +
+        assertEquals(field.get(sqlRequet),"\n" +
                 "                SELECT * FROM myerp.ecriture_comptable\n" +
                 "            ");
     }
@@ -280,7 +274,7 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void setSQLgetEcritureComptable() throws IllegalAccessException, NoSuchFieldException{
         final Field field = comptabiliteDao.getClass().getDeclaredField("SQLgetEcritureComptable");
         field.setAccessible(true);
-        Assert.assertEquals(field.get(sqlRequet),"\n" +
+        assertEquals(field.get(sqlRequet),"\n" +
                 "                SELECT * FROM myerp.ecriture_comptable\n" +
                 "                WHERE id = :id\n" +
                 "            ");
@@ -290,7 +284,7 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void setSQLgetEcritureComptableByRef() throws NoSuchFieldException, IllegalAccessException {
         final Field field = comptabiliteDao.getClass().getDeclaredField("SQLgetEcritureComptableByRef");
         field.setAccessible(true);
-        Assert.assertEquals(field.get(sqlRequet),"\n" +
+        assertEquals(field.get(sqlRequet),"\n" +
                 "                SELECT * FROM myerp.ecriture_comptable\n" +
                 "                WHERE reference = :reference\n" +
                 "            ");
@@ -300,7 +294,7 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void setSQLloadListLigneEcriture() throws NoSuchFieldException, IllegalAccessException{
         final Field field = comptabiliteDao.getClass().getDeclaredField("SQLloadListLigneEcriture");
         field.setAccessible(true);
-        Assert.assertEquals(field.get(sqlRequet),"\n" +
+        assertEquals(field.get(sqlRequet),"\n" +
                 "                SELECT * FROM myerp.ligne_ecriture_comptable\n" +
                 "                WHERE ecriture_id = :ecriture_id\n" +
                 "                ORDER BY ligne_id\n" +
@@ -311,7 +305,7 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void setSQLinsertEcritureComptable() throws NoSuchFieldException, IllegalAccessException{
         final Field field = comptabiliteDao.getClass().getDeclaredField("SQLinsertEcritureComptable");
         field.setAccessible(true);
-        Assert.assertEquals(field.get(sqlRequet),"\n" +
+        assertEquals(field.get(sqlRequet),"\n" +
                 "                INSERT INTO myerp.ecriture_comptable (\n" +
                 "                    id,\n" +
                 "                    journal_code, reference, date, libelle\n" +
@@ -326,9 +320,9 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void setSQLinsertListLigneEcritureComptable() throws NoSuchFieldException, IllegalAccessException{
         final Field field = comptabiliteDao.getClass().getDeclaredField("SQLinsertListLigneEcritureComptable");
         field.setAccessible(true);
-        Assert.assertEquals(field.get(sqlRequet),"\n" +
+        assertEquals(field.get(sqlRequet),"\n" +
                 "                INSERT INTO myerp.ligne_ecriture_comptable (\n" +
-                "                    ecriture_id, ligne_id, compte_comptable_numero, libelle, debit\n" +
+                "                    ecriture_id, ligne_id, compte_comptable_numero, libelle, debit,\n" +
                 "                    credit\n" +
                 "                ) VALUES (\n" +
                 "                    :ecriture_id, :ligne_id, :compte_comptable_numero, :libelle, :debit,\n" +
@@ -341,7 +335,7 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void setSQLupdateEcritureComptable() throws NoSuchFieldException, IllegalAccessException{
         final Field field = comptabiliteDao.getClass().getDeclaredField("SQLupdateEcritureComptable");
         field.setAccessible(true);
-        Assert.assertEquals(field.get(sqlRequet),"\n" +
+        assertEquals(field.get(sqlRequet),"\n" +
                 "                UPDATE myerp.ecriture_comptable SET\n" +
                 "                    journal_code = :journal_code,\n" +
                 "                    reference = :reference,\n" +
@@ -356,7 +350,7 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void setSQLdeleteEcritureComptable() throws NoSuchFieldException, IllegalAccessException{
         final Field field = comptabiliteDao.getClass().getDeclaredField("SQLdeleteEcritureComptable");
         field.setAccessible(true);
-        Assert.assertEquals(field.get(sqlRequet),"\n" +
+        assertEquals(field.get(sqlRequet),"\n" +
                 "                DELETE FROM myerp.ecriture_comptable\n" +
                 "                WHERE id = :id\n" +
                 "            ");
@@ -366,14 +360,9 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void setSQLdeleteListLigneEcritureComptable() throws NoSuchFieldException, IllegalAccessException{
         final Field field = comptabiliteDao.getClass().getDeclaredField("SQLdeleteListLigneEcritureComptable");
         field.setAccessible(true);
-        Assert.assertEquals(field.get(sqlRequet),"\n" +
+        assertEquals(field.get(sqlRequet),"\n" +
                 "                DELETE FROM myerp.ligne_ecriture_comptable\n" +
                 "                WHERE ecriture_id = :ecriture_id\n" +
                 "            ");
-    }
-
-    @AfterClass
-    public static void endTestClass(){
-        LOGGER.info("Fin du test de la classe ComptabibliteDaoImpl");
     }
 }

@@ -1,18 +1,16 @@
 package com.dummy.myerp.consumer.dao.impl.db.rowmapper;
 
-import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.CompteComptableRM;
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.SequenceEcritureComptableRM;
-import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Mock;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SequenceEcritureComptableRMTest {
 
@@ -47,9 +45,9 @@ public class SequenceEcritureComptableRMTest {
 
         SequenceEcritureComptable sequenceEcritureComptable = template.queryForObject("SELECT * FROM sequence_ecriture_comptable WHERE journal_code = 401",rm);
 
-        Assert.assertEquals(sequenceEcritureComptable.getAnnee(),new Integer(2019));
-        Assert.assertEquals(sequenceEcritureComptable.getJournalCode(),"VE");
-        Assert.assertEquals(sequenceEcritureComptable.getDerniereValeur(),new Integer(25));
+        assertEquals(sequenceEcritureComptable.getAnnee(),new Integer(2019));
+        assertEquals(sequenceEcritureComptable.getJournalCode(),"VE");
+        assertEquals(sequenceEcritureComptable.getDerniereValeur(),new Integer(25));
     }
 
 }

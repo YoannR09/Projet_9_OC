@@ -5,8 +5,9 @@ import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.CompteComptab
 
 
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 
 import org.mockito.Mockito;
@@ -50,9 +51,7 @@ public class CompteComptableRMTest{
 
         CompteComptable compteComptable = template.queryForObject("SELECT * FROM compte_comptable WHERE id = -3",rm);
 
-        Assert.assertEquals(compteComptable.getNumero(),new Integer(25446));
-        Assert.assertEquals(compteComptable.getLibelle(),"libelle");
+        assertEquals(compteComptable.getNumero(),new Integer(25446));
+        assertEquals(compteComptable.getLibelle(),"libelle");
     }
-
-
 }

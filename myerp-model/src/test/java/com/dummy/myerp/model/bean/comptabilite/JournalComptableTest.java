@@ -1,7 +1,8 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class JournalComptableTest {
         String code = "235";
         JournalComptable journalComptable = new JournalComptable(code,"libelle");
 
-        Assert.assertEquals(code,journalComptable.getCode());
+        assertEquals(code,journalComptable.getCode());
     }
 
     @Test
@@ -23,7 +24,7 @@ public class JournalComptableTest {
         JournalComptable journalComptable = new JournalComptable();
         journalComptable.setCode(code);
 
-        Assert.assertEquals(code,journalComptable.getCode());
+        assertEquals(code,journalComptable.getCode());
     }
 
     @Test
@@ -31,7 +32,7 @@ public class JournalComptableTest {
         String libelle = "libelle";
         JournalComptable journalComptable = new JournalComptable("235",libelle);
 
-        Assert.assertEquals(libelle,journalComptable.getLibelle());
+        assertEquals(libelle,journalComptable.getLibelle());
     }
 
     @Test
@@ -40,7 +41,7 @@ public class JournalComptableTest {
         JournalComptable journalComptable = new JournalComptable();
         journalComptable.setLibelle(libelle);
 
-        Assert.assertEquals(libelle,journalComptable.getLibelle());
+        assertEquals(libelle,journalComptable.getLibelle());
     }
 
     @Test
@@ -53,6 +54,6 @@ public class JournalComptableTest {
         vList.add(new JournalComptable("126","libelle"));
         vList.add(journalComptable);
 
-        Assert.assertEquals(journalComptable,journalComptable.getByCode(vList,"235"));
+        assertEquals(journalComptable,journalComptable.getByCode(vList,"235"));
     }
 }
