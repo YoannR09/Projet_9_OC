@@ -304,4 +304,43 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         namedJdbcTemplate.update(SQLdeleteListLigneEcritureComptable, vSqlParams);
     }
 
+    /** getSequenceByCodeAndAnneeCourante */
+    private static String SQLgetSequenceViaCodeAnnee;
+    public void setSQLgetSequenceViaCodeAnnee(String pSQLgetSequenceByCodeAndAnneeCourante) {
+        SQLgetSequenceViaCodeAnnee = pSQLgetSequenceByCodeAndAnneeCourante;
+    }
+
+    @Override
+    public SequenceEcritureComptable getSequenceViaCodeAnnee(SequenceEcritureComptable pSequence) throws NotFoundException {
+        if(namedJdbcTemplate == null) {
+            namedJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        }
+        SequenceEcritureComptableRM vRM = new SequenceEcritureComptableRM();
+        MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
+        vSqlParams.addValue("journal_code", pSequence.getJournalCode());
+        vSqlParams.addValue("annee", pSequence.getAnnee());
+        try {
+            return namedJdbcTemplate.queryForObject(SQLgetSequenceViaCodeAnnee, vSqlParams, vRM);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException("SequenceEcritureComptable non trouvée : journal_code=" + pSequence.getJournalCode() + ", annee=" + pSequence.getAnnee());
+        }
+    }
+
+    /** SQLupsertSequenceEcritureComptable */
+    private static String SQLupsertSequenceEcritureComptable;
+    public void setSQLupsertSequenceEcritureComptable(String pSQLupsertSequenceEcritureComptable) {
+        SQLupsertSequenceEcritureComptable = pSQLupsertSequenceEcritureComptable;
+    }
+
+    @Override
+    public void upsertSequenceEcritureComptable(SequenceEcritureComptable pSequence) {
+        if(namedJdbcTemplate == null) {
+            namedJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        }
+        MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
+        vSqlParams.addValue("journal_code", pSequence.getJournalCode());
+        vSqlParams.addValue("annee", pSequence.getAnnee());
+        vSqlParams.addValue("derniere_valeur", pSequence.getDerniereValeur());
+        namedJdbcTemplate.update(SQLupsertSequenceEcritureComptable, vSqlParams);
+    }
 }

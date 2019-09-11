@@ -81,4 +81,19 @@ public interface ComptabiliteDao {
      * @param pId l'id de l'écriture
      */
     void deleteEcritureComptable(Integer pId);
+
+
+    /**
+     * Récupére la séquence via le code et l'année actuelle
+     * @param pSequence
+     * @return
+     * @throws NotFoundException
+     */
+    SequenceEcritureComptable getSequenceViaCodeAnnee(SequenceEcritureComptable pSequence) throws NotFoundException;
+
+    /**
+     * Met à jours la séquence écriture comptable.
+     * @param pSequence
+     */
+    void upsertSequenceEcritureComptable(SequenceEcritureComptable pSequence);
 }
