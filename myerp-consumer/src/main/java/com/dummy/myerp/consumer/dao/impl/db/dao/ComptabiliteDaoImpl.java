@@ -24,6 +24,10 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     /** Instance unique de la classe (design pattern Singleton) */
     private static final ComptabiliteDaoImpl INSTANCE = new ComptabiliteDaoImpl();
 
+    JdbcTemplate vJdbcTemplate;
+    NamedParameterJdbcTemplate namedJdbcTemplate;
+    AbstractDbConsumer abstractDbConsumer;
+
     /**
      * Renvoie l'instance unique de la classe (design pattern Singleton).
      *
@@ -40,6 +44,12 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         super();
     }
 
+    public ComptabiliteDaoImpl(JdbcTemplate template,NamedParameterJdbcTemplate namedTemplate,AbstractDbConsumer adc) {
+        vJdbcTemplate = template;
+        namedJdbcTemplate = namedTemplate;
+        abstractDbConsumer = adc;
+    }
+
 
     // ==================== Méthodes ====================
     /** SQLgetListCompteComptable */
@@ -50,7 +60,9 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
 
     @Override
     public List<CompteComptable> getListCompteComptable() {
-        JdbcTemplate vJdbcTemplate = new JdbcTemplate(this.getDataSource(DataSourcesEnum.MYERP));
+        if (vJdbcTemplate == null) {
+            vJdbcTemplate = new JdbcTemplate(this.getDataSource(DataSourcesEnum.MYERP));
+        }
         CompteComptableRM vRM = new CompteComptableRM();
         List<CompteComptable> vList = vJdbcTemplate.query(SQLgetListCompteComptable, vRM);
         return vList;
@@ -64,7 +76,9 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     }
     @Override
     public List<JournalComptable> getListJournalComptable() {
-        JdbcTemplate vJdbcTemplate = new JdbcTemplate(this.getDataSource(DataSourcesEnum.MYERP));
+        if (vJdbcTemplate == null) {
+            vJdbcTemplate = new JdbcTemplate(this.getDataSource(DataSourcesEnum.MYERP));
+        }
         JournalComptableRM vRM = new JournalComptableRM();
         List<JournalComptable> vList = vJdbcTemplate.query(SQLgetListJournalComptable, vRM);
         return vList;
@@ -79,7 +93,9 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     }
     @Override
     public List<EcritureComptable> getListEcritureComptable() {
-        JdbcTemplate vJdbcTemplate = new JdbcTemplate(this.getDataSource(DataSourcesEnum.MYERP));
+        if (vJdbcTemplate == null) {
+            vJdbcTemplate = new JdbcTemplate(this.getDataSource(DataSourcesEnum.MYERP));
+        }
         EcritureComptableRM vRM = new EcritureComptableRM();
         List<EcritureComptable> vList = vJdbcTemplate.query(SQLgetListEcritureComptable, vRM);
         return vList;
@@ -93,13 +109,15 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     }
     @Override
     public EcritureComptable getEcritureComptable(Integer pId) throws NotFoundException {
-        NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        if(namedJdbcTemplate == null) {
+            namedJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        }
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
         vSqlParams.addValue("id", pId);
         EcritureComptableRM vRM = new EcritureComptableRM();
         EcritureComptable vBean;
         try {
-            vBean = vJdbcTemplate.queryForObject(SQLgetEcritureComptable, vSqlParams, vRM);
+            vBean = namedJdbcTemplate.queryForObject(SQLgetEcritureComptable, vSqlParams, vRM);
         } catch (EmptyResultDataAccessException vEx) {
             throw new NotFoundException("EcritureComptable non trouvée : id=" + pId);
         }
@@ -114,13 +132,15 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     }
     @Override
     public EcritureComptable getEcritureComptableByRef(String pReference) throws NotFoundException {
-        NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        if(namedJdbcTemplate == null) {
+            namedJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        }
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
         vSqlParams.addValue("reference", pReference);
         EcritureComptableRM vRM = new EcritureComptableRM();
         EcritureComptable vBean;
         try {
-            vBean = vJdbcTemplate.queryForObject(SQLgetEcritureComptableByRef, vSqlParams, vRM);
+            vBean = namedJdbcTemplate.queryForObject(SQLgetEcritureComptableByRef, vSqlParams, vRM);
         } catch (EmptyResultDataAccessException vEx) {
             throw new NotFoundException("EcritureComptable non trouvée : reference=" + pReference);
         }
@@ -135,11 +155,13 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     }
     @Override
     public void loadListLigneEcriture(EcritureComptable pEcritureComptable) {
-        NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        if(namedJdbcTemplate == null) {
+            namedJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        }
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
         vSqlParams.addValue("ecriture_id", pEcritureComptable.getId());
         LigneEcritureComptableRM vRM = new LigneEcritureComptableRM();
-        List<LigneEcritureComptable> vList = vJdbcTemplate.query(SQLloadListLigneEcriture, vSqlParams, vRM);
+        List<LigneEcritureComptable> vList = namedJdbcTemplate.query(SQLloadListLigneEcriture, vSqlParams, vRM);
         pEcritureComptable.getListLigneEcriture().clear();
         pEcritureComptable.getListLigneEcriture().addAll(vList);
     }
@@ -155,18 +177,27 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     @Override
     public void insertEcritureComptable(EcritureComptable pEcritureComptable) {
         // ===== Ecriture Comptable
-        NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        if(namedJdbcTemplate == null) {
+            namedJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        }
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
         vSqlParams.addValue("journal_code", pEcritureComptable.getJournal().getCode());
         vSqlParams.addValue("reference", pEcritureComptable.getReference());
         vSqlParams.addValue("date", pEcritureComptable.getDate(), Types.DATE);
         vSqlParams.addValue("libelle", pEcritureComptable.getLibelle());
 
-        vJdbcTemplate.update(SQLinsertEcritureComptable, vSqlParams);
+        namedJdbcTemplate.update(SQLinsertEcritureComptable, vSqlParams);
 
         // ----- Récupération de l'id
-        Integer vId = this.queryGetSequenceValuePostgreSQL(DataSourcesEnum.MYERP, "myerp.ecriture_comptable_id_seq",
-                                                           Integer.class);
+        Integer vId;
+        if(abstractDbConsumer == null) {
+            vId = this.queryGetSequenceValuePostgreSQL(DataSourcesEnum.MYERP, "myerp.ecriture_comptable_id_seq",
+                    Integer.class);
+        }
+        else {
+            vId = abstractDbConsumer.queryGetSequenceValuePostgreSQL(DataSourcesEnum.MYERP, "myerp.ecriture_comptable_id_seq",
+                    Integer.class);
+        }
         pEcritureComptable.setId(vId);
 
         // ===== Liste des lignes d'écriture
@@ -185,7 +216,9 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
      */
     // CORRECTED
     protected void insertListLigneEcritureComptable(EcritureComptable pEcritureComptable) {
-        NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        if(namedJdbcTemplate == null) {
+            namedJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        }
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
         vSqlParams.addValue("ecriture_id", pEcritureComptable.getId());
 
@@ -199,7 +232,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
 
             vSqlParams.addValue("credit", vLigne.getCredit());
 
-            vJdbcTemplate.update(SQLinsertListLigneEcritureComptable, vSqlParams);
+            namedJdbcTemplate.update(SQLinsertListLigneEcritureComptable, vSqlParams);
         }
     }
 
@@ -214,7 +247,9 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     @Override
     public void updateEcritureComptable(EcritureComptable pEcritureComptable) {
         // ===== Ecriture Comptable
-        NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        if(namedJdbcTemplate == null) {
+            namedJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        }
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
         vSqlParams.addValue("id", pEcritureComptable.getId());
         vSqlParams.addValue("journal_code", pEcritureComptable.getJournal().getCode());
@@ -222,7 +257,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         vSqlParams.addValue("date", pEcritureComptable.getDate(), Types.DATE);
         vSqlParams.addValue("libelle", pEcritureComptable.getLibelle());
 
-        vJdbcTemplate.update(SQLupdateEcritureComptable, vSqlParams);
+        namedJdbcTemplate.update(SQLupdateEcritureComptable, vSqlParams);
 
         // ===== Liste des lignes d'écriture
         this.deleteListLigneEcritureComptable(pEcritureComptable.getId());
@@ -243,10 +278,12 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         this.deleteListLigneEcritureComptable(pId);
 
         // ===== Suppression de l'écriture
-        NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        if(namedJdbcTemplate == null) {
+            namedJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        }
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
         vSqlParams.addValue("id", pId);
-        vJdbcTemplate.update(SQLdeleteEcritureComptable, vSqlParams);
+        namedJdbcTemplate.update(SQLdeleteEcritureComptable, vSqlParams);
     }
 
     /** SQLdeleteListLigneEcritureComptable */
@@ -259,10 +296,12 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
      * @param pEcritureId id de l'écriture comptable
      */
     protected void deleteListLigneEcritureComptable(Integer pEcritureId) {
-        NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        if(namedJdbcTemplate == null) {
+            namedJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        }
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
         vSqlParams.addValue("ecriture_id", pEcritureId);
-        vJdbcTemplate.update(SQLdeleteListLigneEcritureComptable, vSqlParams);
+        namedJdbcTemplate.update(SQLdeleteListLigneEcritureComptable, vSqlParams);
     }
 
 }

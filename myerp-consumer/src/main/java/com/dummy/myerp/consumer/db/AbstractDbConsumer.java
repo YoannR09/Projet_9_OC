@@ -73,8 +73,8 @@ public abstract class AbstractDbConsumer {
      * @param pSeqValueClass : Classe de la valeur de la séquence
      * @return la dernière valeur de la séquence
      */
-    protected <T> T queryGetSequenceValuePostgreSQL(DataSourcesEnum pDataSourcesId,
-                                                    String pSeqName, Class<T> pSeqValueClass) {
+    public <T> T queryGetSequenceValuePostgreSQL(DataSourcesEnum pDataSourcesId,
+                                                 String pSeqName, Class<T> pSeqValueClass) {
 
         JdbcTemplate vJdbcTemplate = new JdbcTemplate(getDataSource(pDataSourcesId));
         String vSeqSQL = "SELECT last_value FROM " + pSeqName;
