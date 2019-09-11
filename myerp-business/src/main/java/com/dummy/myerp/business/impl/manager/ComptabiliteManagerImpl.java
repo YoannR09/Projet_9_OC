@@ -12,6 +12,7 @@ import org.springframework.transaction.TransactionStatus;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -22,7 +23,6 @@ import java.util.Set;
 public class ComptabiliteManagerImpl extends AbstractBusinessManager implements ComptabiliteManager {
 
     // ==================== Attributs ====================
-
 
     // ==================== Constructeurs ====================
     /**
@@ -35,7 +35,9 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     // ==================== Getters/Setters ====================
     @Override
     public List<CompteComptable> getListCompteComptable() {
-        return getDaoProxy().getComptabiliteDao().getListCompteComptable();
+        List<CompteComptable> vList = getDaoProxy().getComptabiliteDao().getListCompteComptable();
+        return vList;
+
     }
 
 
@@ -57,28 +59,19 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      */
     // CORRECTED
     @Override
-    public synchronized void addReference(EcritureComptable pEcritureComptable) throws NotFoundException {
-         /* Le principe :
-                1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
-                    (table sequence_ecriture_comptable)
-                2.  * S'il n'y a aucun enregistrement pour le journal pour l'année concernée :
-                        1. Utiliser le numéro 1.
-                    * Sinon :
-                        1. Utiliser la dernière valeur + 1
-                3.  Mettre à jour la référence de l'écriture avec la référence calculée (RG_Compta_5)
-                4.  Enregistrer (insert/update) la valeur de la séquence en persitance
-                    (table sequence_ecriture_comptable)
-         */
-        Integer dateEcritureComptable = pEcritureComptable.getDate().getYear();
+    public synchronized void addReference(EcritureComptable pEcritureComptable) throws NotFoundException{
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(pEcritureComptable.getDate());
+        Integer dateEcritureComptable = calendar.get(Calendar.YEAR);
         SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
         sequenceEcritureComptable.setJournalCode(pEcritureComptable.getJournal().getCode());
         sequenceEcritureComptable.setAnnee(dateEcritureComptable);
-        SequenceEcritureComptable vExistingSequence = null ;// getDaoProxy().getComptabiliteDao().getSequenceByCodeAndAnneeCourante(sequenceEcritureComptable);
+        SequenceEcritureComptable vSequence = getDaoProxy().getComptabiliteDao().getSequenceViaCodeAnnee(sequenceEcritureComptable);
         Integer numeroSequence;
-        if (vExistingSequence == null){
+        if (vSequence == null){
             numeroSequence = 1;
         } else{
-            numeroSequence = vExistingSequence.getDerniereValeur() + 1;
+            numeroSequence = vSequence.getDerniereValeur() + 1;
         }
         String vReference = pEcritureComptable.getJournal().getCode() +
                 "-" + dateEcritureComptable +
@@ -239,11 +232,14 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void upsertSequenceEcritureComptable(SequenceEcritureComptable pSequence) {
         TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
         try {
-            // méthode pour mettre à jour la séquence.
+            getDaoProxy().getComptabiliteDao().upsertSequenceEcritureComptable(pSequence);
             getTransactionManager().commitMyERP(vTS);
             vTS = null;
         } finally {

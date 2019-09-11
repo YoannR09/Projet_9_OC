@@ -1,29 +1,20 @@
 package com.dummy.myerp.consumer.dao.impl.db.dao;
 
 
-import com.dummy.myerp.consumer.dao.impl.cache.JournalComptableDaoCache;
+import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.SequenceEcritureComptableRM;
 import com.dummy.myerp.consumer.db.AbstractDbConsumer;
 import com.dummy.myerp.consumer.db.DataSourcesEnum;
-import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
-import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
-import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
-import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
-import com.dummy.myerp.technical.exception.FunctionalException;
+import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.technical.exception.NotFoundException;
 import com.dummy.myerp.testconsumer.consumer.ConsumerTestCase;
-import com.dummy.myerp.testconsumer.consumer.SpringRegistry;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -38,22 +29,17 @@ import static org.mockito.Mockito.*;
 
 public class ComptabiliteDaoImplTest extends ConsumerTestCase {
 
-    private static final Logger LOGGER = LogManager.getLogger(SpringRegistry.class);
-    private ComptabiliteDaoImpl comptabiliteDao;
-    private String sqlRequet = null;
-
-    EcritureComptable ecritureComptable;
+    private ComptabiliteDaoImpl         comptabiliteDao;
+    private JdbcTemplate                template;
+    private NamedParameterJdbcTemplate  namedParameterJdbcTemplate;
+    private AbstractDbConsumer          abstractDbConsumer;
+    private String                      sqlRequet = null;
 
     @Test
-    public void  getInstance() {
+    public void getInstance() {
         assertNotNull(comptabiliteDao.getInstance());
         comptabiliteDao = comptabiliteDao.getInstance();
         assertEquals(comptabiliteDao,comptabiliteDao.getInstance());
-    }
-
-    @Test
-    public void consumerTestCase(){
-        
     }
 
     /**
@@ -63,10 +49,6 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void getListCompteComptable() {
 
         // GIVEN
-        JdbcTemplate template = mock(JdbcTemplate.class);
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
-        AbstractDbConsumer abstractDbConsumer = mock(AbstractDbConsumer.class);
-        comptabiliteDao = new ComptabiliteDaoImpl(template,namedParameterJdbcTemplate,abstractDbConsumer);
         CompteComptable compteComptable1 = new CompteComptable(2332,"compte1");
         CompteComptable compteComptable2 = new CompteComptable(4568,"compte2");
         LinkedList<CompteComptable> fakeList = new LinkedList<>();
@@ -93,10 +75,6 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void getListJournalComptable() {
 
         // GIVEN
-        JdbcTemplate template = mock(JdbcTemplate.class);
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
-        AbstractDbConsumer abstractDbConsumer = mock(AbstractDbConsumer.class);
-        comptabiliteDao = new ComptabiliteDaoImpl(template,namedParameterJdbcTemplate,abstractDbConsumer);
         JournalComptable journalComptable1 = new JournalComptable("AC","Achat");
         JournalComptable journalComptable2 = new JournalComptable("RT","Retrait");
         LinkedList<JournalComptable> fakeList = new LinkedList<>();
@@ -123,10 +101,6 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void getListEcritureComptable() {
 
         // GIVEN
-        JdbcTemplate template = mock(JdbcTemplate.class);
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
-        AbstractDbConsumer abstractDbConsumer = mock(AbstractDbConsumer.class);
-        comptabiliteDao = new ComptabiliteDaoImpl(template,namedParameterJdbcTemplate,abstractDbConsumer);
         EcritureComptable vEcritureComptable1 = new EcritureComptable();
         vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable1.setDate(new Date());
@@ -181,10 +155,6 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void getEcritureComptable() throws NotFoundException {
 
         // GIVEN
-        JdbcTemplate template = mock(JdbcTemplate.class);
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
-        AbstractDbConsumer abstractDbConsumer = mock(AbstractDbConsumer.class);
-        comptabiliteDao = new ComptabiliteDaoImpl(template,namedParameterJdbcTemplate,abstractDbConsumer);
         EcritureComptable vEcritureComptable1 = new EcritureComptable();
         vEcritureComptable1.setId(55);
         vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
@@ -212,6 +182,7 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
         assertEquals(ecritureComptable.getTotalDebit(),new BigDecimal(123));
 
         // THROW
+        reset(namedParameterJdbcTemplate);
         doThrow(new RuntimeException("EcritureComptable non trouvée : id= 12")).when(namedParameterJdbcTemplate).queryForObject(anyString(),any(MapSqlParameterSource.class),any(RowMapper.class));
         assertThrows(new RuntimeException("EcritureComptable non trouvée : id= 12").getClass(), () -> comptabiliteDao.getEcritureComptable(41));
     }
@@ -221,11 +192,8 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
      */
     @Test
     public void getEcritureComptableByRef() throws NotFoundException {
+
         // GIVEN
-        JdbcTemplate template = mock(JdbcTemplate.class);
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
-        AbstractDbConsumer abstractDbConsumer = mock(AbstractDbConsumer.class);
-        comptabiliteDao = new ComptabiliteDaoImpl(template,namedParameterJdbcTemplate,abstractDbConsumer);
         EcritureComptable vEcritureComptable1 = new EcritureComptable();
         vEcritureComptable1.setId(55);
         vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
@@ -265,10 +233,6 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void loadListLigneEcriture() {
 
         // GIVEN
-        JdbcTemplate template = mock(JdbcTemplate.class);
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
-        AbstractDbConsumer abstractDbConsumer = mock(AbstractDbConsumer.class);
-        comptabiliteDao = new ComptabiliteDaoImpl(template,namedParameterJdbcTemplate,abstractDbConsumer);
         EcritureComptable vEcritureComptable1 = new EcritureComptable();
         vEcritureComptable1.setId(55);
         vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
@@ -298,10 +262,6 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void insertEcritureComptable() {
 
         // GIVEN
-        JdbcTemplate template = mock(JdbcTemplate.class);
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
-        AbstractDbConsumer abstractDbConsumer = mock(AbstractDbConsumer.class);
-        comptabiliteDao = new ComptabiliteDaoImpl(template,namedParameterJdbcTemplate,abstractDbConsumer);
         EcritureComptable vEcritureComptable1 = new EcritureComptable();
         vEcritureComptable1.setId(55);
         vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
@@ -330,10 +290,6 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void insertListLigneEcritureComptable() {
 
         // GIVEN
-        JdbcTemplate template = mock(JdbcTemplate.class);
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
-        AbstractDbConsumer abstractDbConsumer = mock(AbstractDbConsumer.class);
-        comptabiliteDao = new ComptabiliteDaoImpl(template,namedParameterJdbcTemplate,abstractDbConsumer);
         EcritureComptable vEcritureComptable1 = new EcritureComptable();
         vEcritureComptable1.setId(55);
         vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
@@ -364,10 +320,6 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
     public void updateEcritureComptable() {
 
         // GIVEN
-        JdbcTemplate template = mock(JdbcTemplate.class);
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
-        AbstractDbConsumer abstractDbConsumer = mock(AbstractDbConsumer.class);
-        comptabiliteDao = new ComptabiliteDaoImpl(template,namedParameterJdbcTemplate,abstractDbConsumer);
         EcritureComptable vEcritureComptable1 = new EcritureComptable();
         vEcritureComptable1.setId(55);
         vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
@@ -378,10 +330,8 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
 
     @Test
     public void deleteEcritureComptable() {
-        JdbcTemplate template = mock(JdbcTemplate.class);
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
-        AbstractDbConsumer abstractDbConsumer = mock(AbstractDbConsumer.class);
-        comptabiliteDao = new ComptabiliteDaoImpl(template,namedParameterJdbcTemplate,abstractDbConsumer);
+
+        // GIVEN
         EcritureComptable vEcritureComptable1 = new EcritureComptable();
         EcritureComptable vEcritureComptable2 = new EcritureComptable();
         List<EcritureComptable> fakeDbList = new LinkedList<>();
@@ -415,11 +365,8 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
 
    @Test
     public void deleteListLigneEcritureComptable() {
+
        // GIVEN
-       JdbcTemplate template = mock(JdbcTemplate.class);
-       NamedParameterJdbcTemplate namedParameterJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
-       AbstractDbConsumer abstractDbConsumer = mock(AbstractDbConsumer.class);
-       comptabiliteDao = new ComptabiliteDaoImpl(template,namedParameterJdbcTemplate,abstractDbConsumer);
        List<LigneEcritureComptable> fakeList = new LinkedList<>();
        fakeList.add(new LigneEcritureComptable(new CompteComptable(1),
                null, new BigDecimal(123),
@@ -438,6 +385,47 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
 
        // THEN
        assertEquals(fakeList.size(),0);
+    }
+
+    @Test
+    public void getSequenceViaCodeAnnee() throws NotFoundException {
+
+        // GIVEN
+        List<SequenceEcritureComptable> fakeList = new LinkedList<>();
+        SequenceEcritureComptable sequenceEcritureComptable1 = new SequenceEcritureComptable(new Integer(2019),new Integer(55));
+        sequenceEcritureComptable1.setJournalCode("FE");
+        SequenceEcritureComptable sequenceEcritureComptable2 = new SequenceEcritureComptable(new Integer(2019),new Integer(13));
+        sequenceEcritureComptable2.setJournalCode("AC");
+        fakeList.add(sequenceEcritureComptable1);
+        fakeList.add(sequenceEcritureComptable2);
+        when(namedParameterJdbcTemplate.queryForObject(anyString(),any(MapSqlParameterSource.class),any(RowMapper.class))).thenReturn(sequenceEcritureComptable2);
+        SequenceEcritureComptable sequence = new SequenceEcritureComptable(new Integer(2019),new Integer(55));
+        sequence.setJournalCode("AC");
+
+        // WHEN
+        SequenceEcritureComptable sequenceEcritureComptable = comptabiliteDao.getSequenceViaCodeAnnee(sequence);
+
+        // THEN
+        assertEquals(sequenceEcritureComptable.getAnnee(),new Integer(2019));
+        assertEquals(sequenceEcritureComptable.getDerniereValeur(),new Integer(13));
+        assertEquals(sequenceEcritureComptable.getJournalCode(),"AC");
+    }
+
+    @Test
+    public void upsertSequenceEcritureComptable() {
+        Integer oldDerniereValeur = new Integer(55);
+        SequenceEcritureComptable sequenceEcritureComptable1 = new SequenceEcritureComptable(new Integer(2019),oldDerniereValeur);
+        sequenceEcritureComptable1.setJournalCode("FE");
+        when(namedParameterJdbcTemplate.update(anyString(),any(MapSqlParameterSource.class))).then((Answer<Void>) invocationOnMock -> {
+           sequenceEcritureComptable1.setDerniereValeur(new Integer(56));
+            return null;
+        });
+
+        // WHEN
+        comptabiliteDao.upsertSequenceEcritureComptable(sequenceEcritureComptable1);
+
+        // THEN
+        assertEquals(sequenceEcritureComptable1.getDerniereValeur(),oldDerniereValeur+1);
     }
 
     @Test
@@ -571,5 +559,37 @@ public class ComptabiliteDaoImplTest extends ConsumerTestCase {
                 "                DELETE FROM myerp.ligne_ecriture_comptable\n" +
                 "                WHERE ecriture_id = :ecriture_id\n" +
                 "            ");
+    }
+
+    @Test
+    public void setSQLgetSequenceViaCodeAnnee() throws NoSuchFieldException, IllegalAccessException{
+        comptabiliteDao = new ComptabiliteDaoImpl();
+        final Field field = comptabiliteDao.getClass().getDeclaredField("SQLgetSequenceViaCodeAnnee");
+        field.setAccessible(true);
+        assertEquals(field.get(sqlRequet),"\n" +
+                "                SELECT * FROM myerp.sequence_ecriture_comptable WHERE journal_code = :journal_code AND annee = :annee\n" +
+                "            ");
+    }
+
+    @Test
+    public void setSQLupsertSequenceEcritureComptable() throws NoSuchFieldException, IllegalAccessException{
+        comptabiliteDao = new ComptabiliteDaoImpl();
+        final Field field = comptabiliteDao.getClass().getDeclaredField("SQLupsertSequenceEcritureComptable");
+        field.setAccessible(true);
+        assertEquals(field.get(sqlRequet),"\n" +
+                "                INSERT INTO myerp.sequence_ecriture_comptable (journal_code, annee, derniere_valeur)\n" +
+                "                VALUES (:journal_code, :annee, :derniere_valeur)\n" +
+                "                UPDATE SET derniere_valeur = :derniere_valeur\n" +
+                "                WHERE myerp.sequence_ecriture_comptable.journal_code = :journal_code\n" +
+                "                AND myerp.sequence_ecriture_comptable.annee = :annee\n" +
+                "            ");
+    }
+
+    @BeforeEach
+    public void init(){
+        template = mock(JdbcTemplate.class);
+        namedParameterJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
+        abstractDbConsumer = mock(AbstractDbConsumer.class);
+        comptabiliteDao = new ComptabiliteDaoImpl(template,namedParameterJdbcTemplate,abstractDbConsumer);
     }
 }
