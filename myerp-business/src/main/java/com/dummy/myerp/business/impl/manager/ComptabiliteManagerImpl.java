@@ -59,7 +59,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      */
     // CORRECTED
     @Override
-    public synchronized void addReference(EcritureComptable pEcritureComptable) throws NotFoundException{
+    public synchronized void addReference(EcritureComptable pEcritureComptable) throws NotFoundException, FunctionalException {
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(pEcritureComptable.getDate());
         Integer dateEcritureComptable = calendar.get(Calendar.YEAR);
@@ -77,11 +78,11 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 "-" + dateEcritureComptable +
                 "/" + numeroSequence;
         pEcritureComptable.setReference(vReference);
-        this.updateEcritureComptable(pEcritureComptable);
         SequenceEcritureComptable vNewSequence = new SequenceEcritureComptable();
         vNewSequence.setJournalCode(pEcritureComptable.getJournal().getCode());
         vNewSequence.setAnnee(dateEcritureComptable);
         vNewSequence.setDerniereValeur(numeroSequence);
+        // this.updateEcritureComptable(pEcritureComptable);
         this.upsertSequenceEcritureComptable(vNewSequence);
     }
 
@@ -205,8 +206,10 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     /**
      * {@inheritDoc}
      */
+    // CORRECTED
     @Override
-    public void updateEcritureComptable(EcritureComptable pEcritureComptable){
+    public void updateEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
+        this.checkEcritureComptable(pEcritureComptable);
         TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
         try {
             getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);

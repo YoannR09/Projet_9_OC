@@ -2,21 +2,17 @@ package com.dummy.myerp.business.impl.manager;
 
 
 import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
-import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
 import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
 import com.dummy.myerp.testbusiness.business.BusinessTestCase;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.springframework.transaction.TransactionStatus;
 
+
+import javax.validation.*;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -35,7 +31,7 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
     }
 
     @Test
-    public synchronized void addReference() throws NotFoundException {
+    public void addReference() throws NotFoundException, FunctionalException {
 
         // GIVEN
         manager = spy(new ComptabiliteManagerImpl());
@@ -45,14 +41,14 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Libelle");
-        String oldRef = "AC-2019/00001";
-        vEcritureComptable.setReference(oldRef);
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, null,
                 new BigDecimal(123)));
+        String oldRef = "AC-2019/00001";
+        vEcritureComptable.setReference(oldRef);
 
         // WHEN
         manager.addReference(vEcritureComptable);
@@ -282,12 +278,23 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
 
 
     @Test
-    public void updateEcritureComptable() {
+    public void updateEcritureComptable() throws FunctionalException {
 
         // GIVEN
         manager = spy(new ComptabiliteManagerImpl());
         DaoProxy daoProxy = () -> fakeComptabiblieDao;
         when(manager.getDaoProxy()).thenReturn(daoProxy);
+        vEcritureComptable = new EcritureComptable();
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setDate(new Date());
+        vEcritureComptable.setLibelle("Libelle");
+        vEcritureComptable.setReference("AC-2019/02201");
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                null, new BigDecimal(123),
+                null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                null, null,
+                new BigDecimal(123)));
 
         // WHEN
         manager.updateEcritureComptable(vEcritureComptable);
