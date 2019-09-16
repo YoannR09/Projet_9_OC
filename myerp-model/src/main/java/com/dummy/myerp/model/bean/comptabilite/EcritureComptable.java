@@ -110,8 +110,14 @@ public class EcritureComptable {
      * Renvoie si l'écriture est équilibrée (TotalDebit = TotalCrédit)
      * @return boolean
      */
+    // CORRECTED
     public boolean isEquilibree() {
-        boolean vRetour = this.getTotalDebit().equals(this.getTotalCredit());
+        boolean vRetour;
+        if (this.getTotalDebit().compareTo(this.getTotalCredit()) == 0){
+            vRetour = true;
+        }else {
+            vRetour = false;
+        }
         return vRetour;
     }
 

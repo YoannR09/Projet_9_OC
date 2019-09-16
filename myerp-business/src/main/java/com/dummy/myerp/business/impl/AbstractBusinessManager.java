@@ -77,7 +77,7 @@ public abstract class AbstractBusinessManager {
      *
      * @return Validator
      */
-    protected Validator getConstraintValidator() {
+    public Validator getConstraintValidator() {
         Configuration<?> vConfiguration = Validation.byDefaultProvider().configure();
         ValidatorFactory vFactory = vConfiguration.buildValidatorFactory();
         Validator vValidator = vFactory.getValidator();
