@@ -74,9 +74,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         } else{
             numeroSequence = vSequence.getDerniereValeur() + 1;
         }
-        String vReference = pEcritureComptable.getJournal().getCode() +
-                "-" + dateEcritureComptable +
-                "/" + numeroSequence;
+        String vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/"+ numeroSequence;
         pEcritureComptable.setReference(vReference);
         SequenceEcritureComptable vNewSequence = new SequenceEcritureComptable();
         vNewSequence.setJournalCode(pEcritureComptable.getJournal().getCode());
