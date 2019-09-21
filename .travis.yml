@@ -12,6 +12,9 @@ before_install:
   - cd docker/dev
   - docker-compose up -d
 
+before_script:
+  - cd ../../src
+
 script:
   - mvn test
   - mvn test-consumer
