@@ -15,11 +15,24 @@ import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 public class EcritureComptableRM implements RowMapper<EcritureComptable> {
 
     /** JournalComptableDaoCache */
-    private final JournalComptableDaoCache journalComptableDaoCache = new JournalComptableDaoCache();
+    private JournalComptableDaoCache journalComptableDaoCache;
+    private ConsumerHelper consumerHelper;
+
+    public EcritureComptableRM(){}
+
+    public EcritureComptableRM(JournalComptableDaoCache vJournalComptableDaoCache,ConsumerHelper vConsumerHelper){
+        this.journalComptableDaoCache = vJournalComptableDaoCache;
+        this.consumerHelper = vConsumerHelper;
+    }
+
+
 
 
     @Override
     public EcritureComptable mapRow(ResultSet pRS, int pRowNum) throws SQLException {
+        if (journalComptableDaoCache == null){
+            journalComptableDaoCache = new JournalComptableDaoCache();
+        }
         EcritureComptable vBean = new EcritureComptable();
         vBean.setId(pRS.getInt("id"));
         vBean.setJournal(journalComptableDaoCache.getByCode(pRS.getString("journal_code")));
@@ -28,7 +41,11 @@ public class EcritureComptableRM implements RowMapper<EcritureComptable> {
         vBean.setLibelle(pRS.getString("libelle"));
 
         // Chargement des lignes d'écriture
-        ConsumerHelper.getDaoProxy().getComptabiliteDao().loadListLigneEcriture(vBean);
+        if(consumerHelper == null){
+            ConsumerHelper.getDaoProxy().getComptabiliteDao().loadListLigneEcriture(vBean);
+        }else {
+            consumerHelper.getDaoProxy().getComptabiliteDao().loadListLigneEcriture(vBean);
+        }
 
         return vBean;
     }

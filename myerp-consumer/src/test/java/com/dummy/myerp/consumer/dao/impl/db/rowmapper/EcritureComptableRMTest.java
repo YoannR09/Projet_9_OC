@@ -1,12 +1,12 @@
 package com.dummy.myerp.consumer.dao.impl.db.rowmapper;
 
 
+import com.dummy.myerp.consumer.dao.impl.cache.JournalComptableDaoCache;
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.EcritureComptableRM;
 
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 
-import com.dummy.myerp.testconsumer.consumer.ConsumerTestCase;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -15,27 +15,28 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 import java.sql.ResultSet;
 
 
 
-public class EcritureComptableRMTest extends ConsumerTestCase {
+public class EcritureComptableRMTest{
 
     @Test
     public void mapRow(){
-
         EcritureComptableRM rm = new EcritureComptableRM();
 
         final EcritureComptable result = new EcritureComptable();
 
-        final JdbcTemplate template = Mockito.mock(JdbcTemplate.class);
+        final JdbcTemplate template = mock(JdbcTemplate.class);
 
         Mockito.when(template.queryForObject(Mockito.anyString(), Mockito.any(RowMapper.class)))
                 .thenAnswer((Answer<EcritureComptable>) invocation -> {
 
-                    ResultSet rs = Mockito.mock(ResultSet.class);
+                    ResultSet rs = mock(ResultSet.class);
 
                     Integer id = new Integer(4);
                     String libelle = "libelle";

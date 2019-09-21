@@ -16,6 +16,4 @@ before_script:
   - cd ../../
 
 script:
-  - mvn test
-  - mvn test-consumer
-  - mvn test-business
+  - mvn test -Ptest-consumer,test-business
