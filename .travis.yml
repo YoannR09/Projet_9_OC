@@ -16,4 +16,5 @@ before_script:
   - cd ../../
 
 script:
+  - mvn clean
   - mvn test -Ptest-consumer,test-business
