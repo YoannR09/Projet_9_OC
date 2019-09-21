@@ -1,0 +1,18 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - cd docker/dev
+  - docker-compose up
+
+script:
+  - mvn test
+  - mvn test-consumer
+  - mvn test-business
