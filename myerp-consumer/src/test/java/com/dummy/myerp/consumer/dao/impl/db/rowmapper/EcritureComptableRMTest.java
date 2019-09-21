@@ -7,6 +7,7 @@ import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.EcritureCompt
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 
+import com.dummy.myerp.testconsumer.consumer.ConsumerTestCase;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -16,14 +17,13 @@ import org.springframework.jdbc.core.RowMapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 import java.sql.ResultSet;
 
 
 
-public class EcritureComptableRMTest{
+public class EcritureComptableRMTest extends ConsumerTestCase {
 
     @Test
     public void mapRow(){
