@@ -18,5 +18,3 @@ before_script:
 script:
   - mvn clean
   - mvn test
-  - mvn test -Ptest-consumer
-  - mvn test -Ptest-business
