@@ -2,21 +2,16 @@ package com.dummy.myerp.consumer.dao.impl.db.rowmapper;
 
 
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.CompteComptableRM;
-
-
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
-
-
 import org.mockito.Mockito;
-
 import org.mockito.stubbing.Answer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 

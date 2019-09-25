@@ -8,9 +8,9 @@ import org.mockito.stubbing.Answer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.sql.ResultSet;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JournalComptableRMTest {
 
