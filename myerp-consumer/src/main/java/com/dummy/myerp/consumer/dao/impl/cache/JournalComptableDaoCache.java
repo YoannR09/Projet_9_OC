@@ -33,10 +33,16 @@ public class JournalComptableDaoCache {
      */
     public JournalComptable getByCode(String pCode) {
         if (listJournalComptable == null) {
-            listJournalComptable = ConsumerHelper.getDaoProxy().getComptabiliteDao().getListJournalComptable();
+            listJournalComptable = getListJournalComptable();
         }
 
         JournalComptable vRetour = JournalComptable.getByCode(listJournalComptable, pCode);
         return vRetour;
     }
+
+    private List<JournalComptable> getListJournalComptable() {
+        return ConsumerHelper.getDaoProxy().getComptabiliteDao().getListJournalComptable();
+    }
+
+
 }

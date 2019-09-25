@@ -1,10 +1,12 @@
 package com.dummy.myerp.consumer.dao.impl.db.rowmapper;
 
+import com.dummy.myerp.consumer.dao.impl.cache.JournalComptableDaoCache;
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.EcritureComptableRM;
 
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 
+import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.testconsumer.consumer.ConsumerTestCase;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -18,14 +20,15 @@ import static org.mockito.Mockito.mock;
 
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
-
-public class EcritureComptableRMTest extends ConsumerTestCase {
+public class EcritureComptableRMTest {
 
     @Test
     public void mapRow(){
-        EcritureComptableRM rm = new EcritureComptableRM();
+
+        EcritureComptableRM rm = new EcritureComptableRMFake();
 
         final EcritureComptable result = new EcritureComptable();
 
@@ -63,5 +66,18 @@ public class EcritureComptableRMTest extends ConsumerTestCase {
         assertEquals(ecritureComptable.getId(),new Integer(4));
         assertEquals(ecritureComptable.getReference(),"BQ-2019/00001");
         assertEquals(ecritureComptable.getJournal().toString(),new JournalComptable("AC", "Achat").toString());
+    }
+
+    private class EcritureComptableRMFake extends EcritureComptableRM {
+
+        @Override
+        protected JournalComptable getJournalCode(ResultSet pRS) {
+            return new JournalComptable("AC","Achat");
+        }
+
+        @Override
+        protected void loadListLigneEcriture(EcritureComptable vBean) {
+            vBean.getListLigneEcriture().add(new LigneEcritureComptable());
+        }
     }
 }

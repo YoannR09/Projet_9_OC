@@ -2,6 +2,7 @@ package com.dummy.myerp.consumer.dao.impl.db.rowmapper;
 
 
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.LigneEcritureComptableRM;
+import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.testconsumer.consumer.ConsumerTestCase;
 import org.junit.jupiter.api.Test;
@@ -12,15 +13,16 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LigneEcritureComptableRMTest extends ConsumerTestCase {
+public class LigneEcritureComptableRMTest {
 
     @Test
     public void mapRow(){
 
-        LigneEcritureComptableRM rm = new LigneEcritureComptableRM();
+        LigneEcritureComptableRM rm = new LigneEcritureComptableRMFake();
 
         final LigneEcritureComptable result = new LigneEcritureComptable();
 
@@ -56,5 +58,12 @@ public class LigneEcritureComptableRMTest extends ConsumerTestCase {
         assertEquals(ligneEcritureComptable.getCredit(), new BigDecimal(110.00));
         assertEquals(ligneEcritureComptable.getDebit(), new BigDecimal(110.00));
         assertEquals(ligneEcritureComptable.getCompteComptable().getNumero(),new Integer(401));
+    }
+
+    private class LigneEcritureComptableRMFake extends LigneEcritureComptableRM {
+        @Override
+        protected CompteComptable getCompteComptableNumero(ResultSet pRS) {
+            return new CompteComptable(401,"Libelle");
+        }
     }
 }
