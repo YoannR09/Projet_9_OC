@@ -5,38 +5,27 @@ import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
-import com.dummy.myerp.testbusiness.business.BusinessTestCase;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.transaction.TransactionStatus;
 
-
-import javax.validation.*;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 
-public class ComptabiliteManagerImplTest extends BusinessTestCase {
+public class ComptabiliteManagerImplTest {
 
-    private ComptabiliteManagerImpl manager;
+    private ComptabiliteManagerImpl manager = new ComptabibliteManagerImplFake();
     private FakeComptabiblieDao fakeComptabiblieDao = new FakeComptabiblieDao();
     private EcritureComptable vEcritureComptable;
-
-
-    @BeforeEach
-    public void setUp(){
-        manager = new ComptabiliteManagerImpl();
-    }
 
     @Test
     public void addReference() throws NotFoundException, FunctionalException {
 
         // GIVEN
-        manager = spy(new ComptabiliteManagerImpl());
-        DaoProxy daoProxy = () -> fakeComptabiblieDao;
-        when(manager.getDaoProxy()).thenReturn(daoProxy);
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
@@ -62,10 +51,6 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
     @Test
     public void getListCompteComptable() {
 
-        // GIVEN
-        manager = spy(new ComptabiliteManagerImpl());
-        DaoProxy daoProxy = () -> fakeComptabiblieDao;
-        when(manager.getDaoProxy()).thenReturn(daoProxy);
 
         // WHEN
         List<CompteComptable> vList = manager.getListCompteComptable();
@@ -78,10 +63,6 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
     @Test
     public void getListJournalComptable() {
 
-        // GIVEN
-        manager = spy(new ComptabiliteManagerImpl());
-        DaoProxy daoProxy = () -> fakeComptabiblieDao;
-        when(manager.getDaoProxy()).thenReturn(daoProxy);
 
         // WHEN
         List<JournalComptable> vList = manager.getListJournalComptable();
@@ -94,10 +75,6 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
 
     @Test
     public void getListEcritureComptable() {
-        // GIVEN
-        manager = spy(new ComptabiliteManagerImpl());
-        DaoProxy daoProxy = () -> fakeComptabiblieDao;
-        when(manager.getDaoProxy()).thenReturn(daoProxy);
 
         // WHEN
         List<EcritureComptable> vList = manager.getListEcritureComptable();
@@ -129,7 +106,8 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
     }
 
     @Test
-    public void checkEcritureComptableUnitViolation() throws FunctionalException {
+    public void checkEcritureComptableUnitViolation() {
+
         vEcritureComptable = new EcritureComptable();
 
         assertThrows(new FunctionalException("L'écriture comptable n'est pas équilibrée.").getClass(), () -> manager.checkEcritureComptableUnit(vEcritureComptable));
@@ -201,9 +179,6 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
     public void checkEcritureComptableUnitRG6() throws FunctionalException {
 
         // GIVEN
-        manager = spy(new ComptabiliteManagerImpl());
-        DaoProxy daoProxy = () -> fakeComptabiblieDao;
-        when(manager.getDaoProxy()).thenReturn(daoProxy);
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
@@ -246,12 +221,9 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
     }
 
     @Test
-    public void deleteEcritureComptable() throws FunctionalException {
+    public void deleteEcritureComptable() {
 
         // GIVEN
-        manager = spy(new ComptabiliteManagerImpl());
-        DaoProxy daoProxy = () -> fakeComptabiblieDao;
-        when(manager.getDaoProxy()).thenReturn(daoProxy);
         Integer listSize = manager.getListEcritureComptable().size();
 
         // WHEN
@@ -260,20 +232,6 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
         // THEN
         assertEquals(listSize-1,manager.getListEcritureComptable().size());
 
-
-        EcritureComptable vEcritureComptable1 = new EcritureComptable();
-        vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable1.setDate(new Date());
-        vEcritureComptable1.setId(45);
-        vEcritureComptable1.setLibelle("Libelle");
-        vEcritureComptable1.setReference("AC-2019/00001");
-        vEcritureComptable1.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
-                null));
-        vEcritureComptable1.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-                null, null,
-                new BigDecimal(123)));
-        manager.insertEcritureComptable(vEcritureComptable1);
     }
 
 
@@ -281,9 +239,6 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
     public void updateEcritureComptable() throws FunctionalException {
 
         // GIVEN
-        manager = spy(new ComptabiliteManagerImpl());
-        DaoProxy daoProxy = () -> fakeComptabiblieDao;
-        when(manager.getDaoProxy()).thenReturn(daoProxy);
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
@@ -298,9 +253,6 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
 
         // WHEN
         manager.updateEcritureComptable(vEcritureComptable);
-
-        // THEN
-        verify(manager).updateEcritureComptable(vEcritureComptable);
     }
 
 
@@ -309,9 +261,6 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
     public void insertEcritureComptable() throws FunctionalException {
 
         // GIVEN
-        manager = spy(new ComptabiliteManagerImpl());
-        DaoProxy daoProxy = () -> fakeComptabiblieDao;
-        when(manager.getDaoProxy()).thenReturn(daoProxy);
         Integer listSize = manager.getListEcritureComptable().size();
         EcritureComptable vEcritureComptable1 = new EcritureComptable();
         vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
@@ -335,16 +284,32 @@ public class ComptabiliteManagerImplTest extends BusinessTestCase {
 
     @Test
     public void upsertSequenceEcritureComptable() {
-        manager = spy(new ComptabiliteManagerImpl());
-        DaoProxy daoProxy = () -> fakeComptabiblieDao;
-        when(manager.getDaoProxy()).thenReturn(daoProxy);
+
         SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable(new Integer(2019),new Integer(59));
         sequenceEcritureComptable.setJournalCode("AC");
 
         // WHEN
         manager.upsertSequenceEcritureComptable(sequenceEcritureComptable);
+    }
 
-        // THEN
-        verify(manager).upsertSequenceEcritureComptable(sequenceEcritureComptable);
+    private class ComptabibliteManagerImplFake extends ComptabiliteManagerImpl {
+
+        @Override
+        protected DaoProxy daoProxy() {
+            return () -> fakeComptabiblieDao;
+        }
+
+        @Override
+        protected TransactionStatus getvTS() {
+            return mock(TransactionStatus.class);
+        }
+
+        @Override
+        protected void rollbackMyERP(TransactionStatus vTS) {
+        }
+
+        @Override
+        protected void commitMyERP(TransactionStatus vTS) {
+        }
     }
 }
