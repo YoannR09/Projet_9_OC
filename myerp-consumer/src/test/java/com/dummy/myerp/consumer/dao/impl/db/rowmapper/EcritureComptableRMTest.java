@@ -1,7 +1,5 @@
 package com.dummy.myerp.consumer.dao.impl.db.rowmapper;
 
-
-import com.dummy.myerp.consumer.dao.impl.cache.JournalComptableDaoCache;
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.EcritureComptableRM;
 
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
