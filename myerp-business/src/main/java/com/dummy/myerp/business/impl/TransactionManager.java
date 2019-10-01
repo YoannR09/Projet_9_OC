@@ -8,7 +8,13 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 /**
  * <p>Classe de gestion des Transactions de persistance</p>
  */
+
+
 public class TransactionManager {
+
+    public TransactionManager(PlatformTransactionManager vPtmMyERP){
+        this.ptmMyERP = vPtmMyERP;
+    }
 
     // ==================== Attributs Static ====================
     /** PlatformTransactionManager pour le DataSource MyERP */
@@ -39,7 +45,7 @@ public class TransactionManager {
     /**
      * Constructeur.
      */
-    protected TransactionManager() {
+    public TransactionManager() {
         super();
     }
 
@@ -58,7 +64,6 @@ public class TransactionManager {
         DefaultTransactionDefinition vTDef = new DefaultTransactionDefinition();
         vTDef.setName("Transaction_txManagerMyERP");
         vTDef.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-
         return ptmMyERP.getTransaction(vTDef);
     }
 

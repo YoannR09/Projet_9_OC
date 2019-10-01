@@ -76,13 +76,24 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         } else{
             numeroSequence = vSequence.getDerniereValeur() + 1;
         }
-        String vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/"+ numeroSequence;
+        String vReference;
+        if (numeroSequence.toString().length() == 1){
+            vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/0000"+ numeroSequence;
+        } else if (numeroSequence.toString().length() == 2){
+            vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/000"+ numeroSequence;
+        }else if (numeroSequence.toString().length() == 3){
+            vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/00"+ numeroSequence;
+        }else if (numeroSequence.toString().length() == 4){
+            vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/0"+ numeroSequence;
+        } else  {
+           vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/"+ numeroSequence;
+        }
         pEcritureComptable.setReference(vReference);
         SequenceEcritureComptable vNewSequence = new SequenceEcritureComptable();
         vNewSequence.setJournalCode(pEcritureComptable.getJournal().getCode());
         vNewSequence.setAnnee(dateEcritureComptable);
         vNewSequence.setDerniereValeur(numeroSequence);
-        // this.updateEcritureComptable(pEcritureComptable);
+        this.updateEcritureComptable(pEcritureComptable);
         this.upsertSequenceEcritureComptable(vNewSequence);
     }
 
@@ -107,7 +118,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     // CORRECTED
     protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException {
         // ===== Vérification des contraintes unitaires sur les attributs de l'écriture
-        Set<ConstraintViolation<EcritureComptable>> vViolations = getConstraintValidator().validate(pEcritureComptable);
+        Set<ConstraintViolation<EcritureComptable>> vViolations = getValidate(pEcritureComptable);
         if (!vViolations.isEmpty()) {
             throw new FunctionalException("L'écriture comptable ne respecte pas les règles de gestion.",
                     new ConstraintViolationException(
@@ -158,7 +169,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         }
 
     }
-
 
     /**
      * Vérifie que l'Ecriture comptable respecte les règles de gestion liées au contexte
@@ -268,5 +278,10 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
     protected void commitMyERP(TransactionStatus vTS) {
         getTransactionManager().commitMyERP(vTS);
+    }
+
+
+    protected Set<ConstraintViolation<EcritureComptable>> getValidate(EcritureComptable pEcritureComptable) {
+        return getConstraintValidator().validate(pEcritureComptable);
     }
 }

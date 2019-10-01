@@ -115,6 +115,17 @@ public class EcritureComptableTest {
         assertNotNull(vEcriture.getListLigneEcriture());
     }
 
+    @Test
+    public void toStringTest(){
+        String toString = "EcritureComptable{id=1, journal=JournalComptable{code='code', libelle='libelle'}, reference='reference', libelle='Equilibrée', totalDebit=341, totalCredit=341, listLigneEcriture=[\n" +
+                "LigneEcritureComptable{compteComptable=CompteComptable{numero=1, libelle='null'}, libelle='200', debit=200, credit=null}\n" +
+                "LigneEcritureComptable{compteComptable=CompteComptable{numero=1, libelle='null'}, libelle='68', debit=101, credit=33}\n" +
+                "LigneEcritureComptable{compteComptable=CompteComptable{numero=2, libelle='null'}, libelle='-301', debit=null, credit=301}\n" +
+                "LigneEcritureComptable{compteComptable=CompteComptable{numero=2, libelle='null'}, libelle='33', debit=40, credit=7}\n" +
+                "]}";
+        assertEquals(vEcriture.toString(),toString);
+    }
+
     @BeforeEach
     public void initEcritureComptable(){
         vEcriture.setId(new Integer(1));

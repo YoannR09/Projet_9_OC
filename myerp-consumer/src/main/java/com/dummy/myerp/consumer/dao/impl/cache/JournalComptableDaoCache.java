@@ -35,14 +35,18 @@ public class JournalComptableDaoCache {
         if (listJournalComptable == null) {
             listJournalComptable = getListJournalComptable();
         }
-
-        JournalComptable vRetour = JournalComptable.getByCode(listJournalComptable, pCode);
+        JournalComptable vRetour = getByCodeJournal(pCode);
         return vRetour;
     }
 
-    private List<JournalComptable> getListJournalComptable() {
-        return ConsumerHelper.getDaoProxy().getComptabiliteDao().getListJournalComptable();
+    public JournalComptable getByCodeJournal(String pCode) {
+        if (listJournalComptable == null) {
+            listJournalComptable = getListJournalComptable();
+        }
+        return JournalComptable.getByCode(listJournalComptable, pCode);
     }
 
-
+    public List<JournalComptable> getListJournalComptable() {
+        return ConsumerHelper.getDaoProxy().getComptabiliteDao().getListJournalComptable();
+    }
 }

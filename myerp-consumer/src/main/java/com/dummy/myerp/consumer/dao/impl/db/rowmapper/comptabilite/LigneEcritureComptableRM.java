@@ -33,6 +33,4 @@ public class LigneEcritureComptableRM implements RowMapper<LigneEcritureComptabl
         return compteComptableDaoCache.getByNumero(pRS.getObject("compte_comptable_numero",
                                                                                    Integer.class));
     }
-
-
 }

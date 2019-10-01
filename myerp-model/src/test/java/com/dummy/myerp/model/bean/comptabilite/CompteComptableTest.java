@@ -46,7 +46,6 @@ public class CompteComptableTest {
 
     @Test
     public void getByNumero() {
-
         CompteComptable compteComptable = new CompteComptable(7,"libelle");
         List<CompteComptable> vList = new ArrayList<>();
         vList.add(compteComptable);
@@ -54,7 +53,7 @@ public class CompteComptableTest {
         vList.add(new CompteComptable(new Integer(1),"libelle"));
         vList.add(new CompteComptable(new Integer(2),"libelle"));
 
-        assertEquals(compteComptable,compteComptable.getByNumero(vList,7));
+        assertEquals(compteComptable,CompteComptable.getByNumero(vList,7));
     }
 
 

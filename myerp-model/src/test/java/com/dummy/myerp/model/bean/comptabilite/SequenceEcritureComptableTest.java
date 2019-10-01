@@ -58,4 +58,14 @@ public class SequenceEcritureComptableTest {
 
         assertEquals(sequenceEcritureComptable.getJournalCode(),"AC");
     }
+
+    @Test
+    public void toStringTest(){
+        String toString = "SequenceEcritureComptable{annee=2019, derniereValeur=5}";
+        SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
+        sequenceEcritureComptable.setDerniereValeur(5);
+        sequenceEcritureComptable.setJournalCode("AC");
+        sequenceEcritureComptable.setAnnee(2019);
+        assertEquals(toString,sequenceEcritureComptable.toString());
+    }
 }

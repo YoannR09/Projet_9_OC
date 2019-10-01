@@ -130,7 +130,6 @@ public class EcritureComptable {
             .append("id=").append(id)
             .append(vSEP).append("journal=").append(journal)
             .append(vSEP).append("reference='").append(reference).append('\'')
-            .append(vSEP).append("date=").append(date)
             .append(vSEP).append("libelle='").append(libelle).append('\'')
             .append(vSEP).append("totalDebit=").append(this.getTotalDebit().toPlainString())
             .append(vSEP).append("totalCredit=").append(this.getTotalCredit().toPlainString())

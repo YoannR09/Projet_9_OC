@@ -54,6 +54,6 @@ public class JournalComptableTest {
         vList.add(new JournalComptable("126","libelle"));
         vList.add(journalComptable);
 
-        assertEquals(journalComptable,journalComptable.getByCode(vList,"235"));
+        assertEquals(journalComptable,JournalComptable.getByCode(vList,"235"));
     }
 }

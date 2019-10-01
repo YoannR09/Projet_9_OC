@@ -39,9 +39,7 @@ public class ComptabiliteDaoImplTest {
         assertEquals(comptabiliteDao,comptabiliteDao.getInstance());
     }
 
-    /**
-     * Test de la méthode pour récupérer une liste de compteComptable
-     */
+
     @Test
     public void getListCompteComptable() {
 
@@ -65,9 +63,6 @@ public class ComptabiliteDaoImplTest {
         assertEquals(vList.size(),2);
     }
 
-    /**
-     * Test de la méthode pour récupérer une liste de journalComptable
-     */
     @Test
     public void getListJournalComptable() {
 
@@ -91,9 +86,7 @@ public class ComptabiliteDaoImplTest {
         assertEquals(vList.size(),2);
     }
 
-    /**
-     * Test de la méthode pour récupérer une liste d'écritureComptable
-     */
+
     @Test
     public void getListEcritureComptable() {
 
@@ -145,9 +138,7 @@ public class ComptabiliteDaoImplTest {
         assertEquals(vList.size(),2);
     }
 
-    /**
-     * Test de la méthode pour récupérer une ecritureComptable via un id
-     */
+
     @Test
     public void getEcritureComptable() throws NotFoundException {
 
@@ -184,9 +175,6 @@ public class ComptabiliteDaoImplTest {
         assertThrows(new RuntimeException("EcritureComptable non trouvée : id= 12").getClass(), () -> comptabiliteDao.getEcritureComptable(41));
     }
 
-    /**
-     * Test de la méthode pour récupérer une ecritureComptable via une réference
-     */
     @Test
     public void getEcritureComptableByRef() throws NotFoundException {
 
@@ -223,9 +211,6 @@ public class ComptabiliteDaoImplTest {
         assertThrows(new RuntimeException("EcritureComptable non trouvée : reference=" + "AC-2019/00001").getClass(), () -> comptabiliteDao.getEcritureComptableByRef("AC-2019/00001"));
     }
 
-    /**
-     * Test de la méthode pour initaliser la liste des ligneEcriture de l'ecritureComptable
-     */
     @Test
     public void loadListLigneEcriture() {
 

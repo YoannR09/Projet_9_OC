@@ -1,16 +1,24 @@
 package com.dummy.myerp.business.impl.manager;
 
 
+import com.dummy.myerp.business.contrat.BusinessProxy;
+import com.dummy.myerp.business.contrat.manager.ComptabiliteManager;
+import com.dummy.myerp.business.impl.TransactionManager;
 import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.TransactionStatus;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -154,7 +162,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableUnitRG5(){
+    public void checkEcritureComptableUnitRG5() throws FunctionalException {
 
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
@@ -173,6 +181,10 @@ public class ComptabiliteManagerImplTest {
         vEcritureComptable.setReference("BQ-2019/00001");
 
         assertThrows(new FunctionalException("Le code journal dans la référence doit correspondre à celui du code journal").getClass(), () -> manager.checkEcritureComptableUnit(vEcritureComptable));
+
+        vEcritureComptable.setReference("AC-2019/00041");
+
+        manager.checkEcritureComptable(vEcritureComptable);
     }
 
     @Test
@@ -292,6 +304,51 @@ public class ComptabiliteManagerImplTest {
         manager.upsertSequenceEcritureComptable(sequenceEcritureComptable);
     }
 
+    @Test
+    public void daoProxy() {
+        manager = new ComptabiliteManagerImpl();
+        init(manager);
+        DaoProxy daoProxy = manager.getDaoProxy();
+        assertNotNull(daoProxy);
+    }
+
+    @Test
+    public void getvTS() {
+        manager = new ComptabiliteManagerImpl();
+        init(manager);
+        manager.getvTS();
+    }
+
+    @Test
+    public void rollbackMyERP() {
+        manager = new ComptabiliteManagerImpl();
+        init(manager);
+        manager.rollbackMyERP(manager.getvTS());
+    }
+
+    @Test
+    public void commitMyERP() {
+        manager = new ComptabiliteManagerImpl();
+        init(manager);
+        manager.commitMyERP(manager.getvTS());
+    }
+
+    @Test
+    public void getValidate() {
+        manager = new ComptabiliteManagerImpl();
+        init(manager);
+        Set<ConstraintViolation<EcritureComptable>> constraintViolations = manager.getValidate(new EcritureComptable());
+        assertNotNull(constraintViolations);
+    }
+
+    public void init(ComptabiliteManagerImpl vManager){
+        BusinessProxy businessProxy = mock(BusinessProxy.class);
+        DaoProxy daoProxy = () -> new FakeComptabiblieDao();
+        TransactionManager transactionManager = mock(TransactionManager.class);
+        vManager.configure(businessProxy,daoProxy,transactionManager);
+    }
+
+
     private class ComptabibliteManagerImplFake extends ComptabiliteManagerImpl {
 
         @Override
@@ -310,6 +367,16 @@ public class ComptabiliteManagerImplTest {
 
         @Override
         protected void commitMyERP(TransactionStatus vTS) {
+        }
+
+        @Override
+        protected Set<ConstraintViolation<EcritureComptable>> getValidate(EcritureComptable pEcritureComptable) {
+            Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+            Set<ConstraintViolation<EcritureComptable>> valide = validator.validate(pEcritureComptable);
+            if(!valide.isEmpty()){
+                valide.clear();
+            }
+            return valide;
         }
     }
 }
