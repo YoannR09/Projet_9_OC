@@ -192,11 +192,11 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         Integer vId;
         if(abstractDbConsumer == null) {
             vId = this.queryGetSequenceValuePostgreSQL(DataSourcesEnum.MYERP, "myerp.ecriture_comptable_id_seq",
-                    Integer.class);
+                    Integer.class,null);
         }
         else {
             vId = abstractDbConsumer.queryGetSequenceValuePostgreSQL(DataSourcesEnum.MYERP, "myerp.ecriture_comptable_id_seq",
-                    Integer.class);
+                    Integer.class,null);
         }
         pEcritureComptable.setId(vId);
 

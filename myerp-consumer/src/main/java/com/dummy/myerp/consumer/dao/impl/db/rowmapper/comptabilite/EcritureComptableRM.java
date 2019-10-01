@@ -35,11 +35,11 @@ public class EcritureComptableRM implements RowMapper<EcritureComptable> {
         return vBean;
     }
 
-    protected JournalComptable getJournalCode(ResultSet pRS) throws SQLException {
+    public JournalComptable getJournalCode(ResultSet pRS) throws SQLException {
         return journalComptableDaoCache.getByCode(pRS.getString("journal_code"));
     }
 
-    protected void loadListLigneEcriture(EcritureComptable vBean) {
+    public void loadListLigneEcriture(EcritureComptable vBean) {
         ConsumerHelper.getDaoProxy().getComptabiliteDao().loadListLigneEcriture(vBean);
     }
 }

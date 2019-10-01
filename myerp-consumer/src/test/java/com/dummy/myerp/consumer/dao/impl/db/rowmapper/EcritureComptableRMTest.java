@@ -1,5 +1,9 @@
 package com.dummy.myerp.consumer.dao.impl.db.rowmapper;
 
+import com.dummy.myerp.consumer.ConsumerHelper;
+import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
+import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
+import com.dummy.myerp.consumer.dao.impl.db.fake.FakeComptabiblieDao;
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.EcritureComptableRM;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
@@ -11,20 +15,24 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class EcritureComptableRMTest {
 
+    EcritureComptableRM rm = new EcritureComptableRM();
+
     @Test
     public void mapRow(){
 
-        EcritureComptableRM rm = new EcritureComptableRMFake();
-
         final EcritureComptable result = new EcritureComptable();
-
+        ConsumerHelper.configure(() -> new FakeComptabiblieDao());
         final JdbcTemplate template = mock(JdbcTemplate.class);
 
         Mockito.when(template.queryForObject(Mockito.anyString(), Mockito.any(RowMapper.class)))
@@ -61,16 +69,21 @@ public class EcritureComptableRMTest {
         assertEquals(ecritureComptable.getJournal().toString(),new JournalComptable("AC", "Achat").toString());
     }
 
-    private class EcritureComptableRMFake extends EcritureComptableRM {
+    @Test
+    public void getJournalCode() throws SQLException {
+        ConsumerHelper.configure(() -> new FakeComptabiblieDao());
+        ResultSet rs = mock(ResultSet.class);
+        when(rs.getString(anyString())).thenReturn("AC");
+        JournalComptable journalComptable = rm.getJournalCode(rs);
 
-        @Override
-        protected JournalComptable getJournalCode(ResultSet pRS) {
-            return new JournalComptable("AC","Achat");
-        }
+        // THEN
+        assertNotNull(journalComptable);
+    }
 
-        @Override
-        protected void loadListLigneEcriture(EcritureComptable vBean) {
-            vBean.getListLigneEcriture().add(new LigneEcritureComptable());
-        }
+    @Test
+    public void loadListLigneEcriture() {
+        EcritureComptable ecritureComptable = new EcritureComptable();
+        rm.loadListLigneEcriture(ecritureComptable);
+        assertEquals(2,ecritureComptable.getListLigneEcriture().size());
     }
 }

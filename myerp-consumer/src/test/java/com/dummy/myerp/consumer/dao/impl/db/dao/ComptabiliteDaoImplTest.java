@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.sql.Types;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -255,7 +256,7 @@ public class ComptabiliteDaoImplTest {
             vList.add(vEcritureComptable1);
             return null;
         });
-        when(abstractDbConsumer.queryGetSequenceValuePostgreSQL(any(DataSourcesEnum.class),anyString(),anyObject())).thenReturn(12);
+        when(abstractDbConsumer.queryGetSequenceValuePostgreSQL(any(DataSourcesEnum.class),anyString(),anyObject(),anyObject())).thenReturn(12);
 
 
         // WHEN
@@ -308,6 +309,9 @@ public class ComptabiliteDaoImplTest {
         vEcritureComptable1.setDate(new Date());
         vEcritureComptable1.setLibelle("Libelle");
         vEcritureComptable1.setReference("AC-2019/00001");
+
+        // WHEN
+        comptabiliteDao.updateEcritureComptable(vEcritureComptable1);
     }
 
     @Test
@@ -368,6 +372,8 @@ public class ComptabiliteDaoImplTest {
        // THEN
        assertEquals(fakeList.size(),0);
     }
+
+
 
     @Test
     public void getSequenceViaCodeAnnee() throws NotFoundException {

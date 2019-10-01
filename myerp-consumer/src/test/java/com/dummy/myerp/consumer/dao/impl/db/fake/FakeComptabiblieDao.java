@@ -68,7 +68,8 @@ public class FakeComptabiblieDao implements ComptabiliteDao {
 
     @Override
     public void loadListLigneEcriture(EcritureComptable pEcritureComptable) {
-
+        pEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable());
+        pEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable());
     }
 
     @Override

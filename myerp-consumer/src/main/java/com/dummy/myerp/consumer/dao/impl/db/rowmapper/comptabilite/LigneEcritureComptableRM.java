@@ -29,7 +29,7 @@ public class LigneEcritureComptableRM implements RowMapper<LigneEcritureComptabl
         return vBean;
     }
 
-    protected CompteComptable getCompteComptableNumero(ResultSet pRS) throws SQLException {
+    public CompteComptable getCompteComptableNumero(ResultSet pRS) throws SQLException {
         return compteComptableDaoCache.getByNumero(pRS.getObject("compte_comptable_numero",
                                                                                    Integer.class));
     }

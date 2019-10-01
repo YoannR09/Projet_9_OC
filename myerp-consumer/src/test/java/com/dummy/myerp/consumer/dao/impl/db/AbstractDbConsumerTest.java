@@ -48,4 +48,20 @@ public class AbstractDbConsumerTest extends AbstractDbConsumer {
         assertNotNull(data);
         assertThrows(new UnsatisfiedLinkError().getClass(),() -> getDataSource(null));
     }
+
+    @Test
+    public void queryGetSequenceValuePostgreSQLTest() {
+
+        JdbcTemplate template = mock(JdbcTemplate.class);
+        when(template.queryForObject(anyString(),any(Class.class))).thenReturn(null);
+
+        assertNull(queryGetSequenceValuePostgreSQL(DataSourcesEnum.MYERP, "test",
+                Integer.class,template));
+    }
+
+    @Test
+    public void testConstructeur(){
+        AbstractDbConsumer abstractDbConsumer = new AbstractDbConsumer() {};
+        assertNotNull(abstractDbConsumer);
+    }
 }

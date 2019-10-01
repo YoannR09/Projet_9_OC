@@ -305,6 +305,15 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
+    public void daoProxyTest() {
+        manager = new ComptabiliteManagerImpl();
+        init(manager);
+        DaoProxy daoProxy = manager.daoProxy();
+        assertNotNull(daoProxy);
+    }
+
+
+    @Test
     public void daoProxy() {
         manager = new ComptabiliteManagerImpl();
         init(manager);
