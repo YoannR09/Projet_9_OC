@@ -92,8 +92,14 @@ public interface ComptabiliteDao {
     SequenceEcritureComptable getSequenceViaCodeAnnee(SequenceEcritureComptable pSequence) throws NotFoundException;
 
     /**
-     * Met à jours la séquence écriture comptable.
+     * Supprime l'ancienne séquence écriture comptable
      * @param pSequence
      */
-    void upsertSequenceEcritureComptable(SequenceEcritureComptable pSequence);
+    void deleteSequenceEcritureComptable(SequenceEcritureComptable pSequence);
+
+    /**
+     * Ajoute la séquence écriture comptable.
+     * @param pSequence
+     */
+    void insertSequenceEcritureComptable(SequenceEcritureComptable pSequence);
 }

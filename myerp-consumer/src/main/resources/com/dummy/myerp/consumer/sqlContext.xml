@@ -94,13 +94,17 @@
                 SELECT * FROM myerp.sequence_ecriture_comptable WHERE journal_code = :journal_code AND annee = :annee
             </value>
         </property>
-        <property name="SQLupsertSequenceEcritureComptable">
+        <property name="SQLdeleteSequenceEcritureComptable">
+            <value>
+                DELETE FROM myerp.sequence_ecriture_comptable
+                WHERE annee = :annee
+                AND journal_code = :journal_code
+            </value>
+        </property>
+        <property name="SQLinsertSequenceEcritureComptable">
             <value>
                 INSERT INTO myerp.sequence_ecriture_comptable (journal_code, annee, derniere_valeur)
                 VALUES (:journal_code, :annee, :derniere_valeur)
-                UPDATE SET derniere_valeur = :derniere_valeur
-                WHERE myerp.sequence_ecriture_comptable.journal_code = :journal_code
-                AND myerp.sequence_ecriture_comptable.annee = :annee
             </value>
         </property>
     </bean>

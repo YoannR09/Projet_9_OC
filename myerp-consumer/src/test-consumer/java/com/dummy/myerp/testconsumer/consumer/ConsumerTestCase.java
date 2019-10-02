@@ -18,6 +18,5 @@ public abstract class ConsumerTestCase {
     public static DaoProxy getDaoProxy() {
 
         return DAO_PROXY;
-
     }
 }

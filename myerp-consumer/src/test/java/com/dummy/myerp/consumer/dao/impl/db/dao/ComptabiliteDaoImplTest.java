@@ -4,6 +4,8 @@ package com.dummy.myerp.consumer.dao.impl.db.dao;
 import com.dummy.myerp.consumer.db.AbstractDbConsumer;
 import com.dummy.myerp.consumer.db.DataSourcesEnum;
 import com.dummy.myerp.model.bean.comptabilite.*;
+import com.dummy.myerp.model.builder.EcritureComptableBuilder;
+import com.dummy.myerp.model.builder.SequenceBuilder;
 import com.dummy.myerp.technical.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +17,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.sql.Types;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -92,22 +93,22 @@ public class ComptabiliteDaoImplTest {
     public void getListEcritureComptable() {
 
         // GIVEN
-        EcritureComptable vEcritureComptable1 = new EcritureComptable();
-        vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable1.setDate(new Date());
-        vEcritureComptable1.setLibelle("Libelle");
-        vEcritureComptable1.setReference("AC-2019/00001");
+        EcritureComptable vEcritureComptable1 = EcritureComptableBuilder.aEcritureComptable()
+                .journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("AC-2019/00001")
+                .date(new Date()).build();
         vEcritureComptable1.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
         vEcritureComptable1.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
                 null, null,
                 new BigDecimal(123)));
-        EcritureComptable vEcritureComptable2 = new EcritureComptable();
-        vEcritureComptable2.setJournal(new JournalComptable("RT", "Retrait"));
-        vEcritureComptable2.setDate(new Date());
-        vEcritureComptable2.setLibelle("Libelle");
-        vEcritureComptable2.setReference("RT-2019/00011");
+        EcritureComptable vEcritureComptable2 = EcritureComptableBuilder.aEcritureComptable()
+                .journal(new JournalComptable("RT", "Retrait"))
+                .libelle("Libelle")
+                .ref("RT-2019/00011")
+                .date(new Date()).build();
         vEcritureComptable2.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
@@ -144,12 +145,12 @@ public class ComptabiliteDaoImplTest {
     public void getEcritureComptable() throws NotFoundException {
 
         // GIVEN
-        EcritureComptable vEcritureComptable1 = new EcritureComptable();
+        EcritureComptable vEcritureComptable1 = EcritureComptableBuilder.aEcritureComptable()
+                .journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("AC-2019/00001")
+                .date(new Date()).build();
         vEcritureComptable1.setId(55);
-        vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable1.setDate(new Date());
-        vEcritureComptable1.setLibelle("Libelle");
-        vEcritureComptable1.setReference("AC-2019/00001");
         vEcritureComptable1.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
@@ -180,12 +181,12 @@ public class ComptabiliteDaoImplTest {
     public void getEcritureComptableByRef() throws NotFoundException {
 
         // GIVEN
-        EcritureComptable vEcritureComptable1 = new EcritureComptable();
+        EcritureComptable vEcritureComptable1 = EcritureComptableBuilder.aEcritureComptable()
+                .journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("AC-2019/00001")
+                .date(new Date()).build();
         vEcritureComptable1.setId(55);
-        vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable1.setDate(new Date());
-        vEcritureComptable1.setLibelle("Libelle");
-        vEcritureComptable1.setReference("AC-2019/00001");
         vEcritureComptable1.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
@@ -216,12 +217,12 @@ public class ComptabiliteDaoImplTest {
     public void loadListLigneEcriture() {
 
         // GIVEN
-        EcritureComptable vEcritureComptable1 = new EcritureComptable();
+        EcritureComptable vEcritureComptable1 = EcritureComptableBuilder.aEcritureComptable()
+                .journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("AC-2019/00001")
+                .date(new Date()).build();
         vEcritureComptable1.setId(55);
-        vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable1.setDate(new Date());
-        vEcritureComptable1.setLibelle("Libelle");
-        vEcritureComptable1.setReference("AC-2019/00001");
         List<LigneEcritureComptable> fakeList = new LinkedList<>();
         fakeList.add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
@@ -245,12 +246,12 @@ public class ComptabiliteDaoImplTest {
     public void insertEcritureComptable() {
 
         // GIVEN
-        EcritureComptable vEcritureComptable1 = new EcritureComptable();
+        EcritureComptable vEcritureComptable1 = EcritureComptableBuilder.aEcritureComptable()
+                .journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("AC-2019/00001")
+                .date(new Date()).build();
         vEcritureComptable1.setId(55);
-        vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable1.setDate(new Date());
-        vEcritureComptable1.setLibelle("Libelle");
-        vEcritureComptable1.setReference("AC-2019/00001");
         List<EcritureComptable> vList = new LinkedList<>();
         when(namedParameterJdbcTemplate.update(anyString(),any(MapSqlParameterSource.class))).then((Answer<Void>) invocationOnMock -> {
             vList.add(vEcritureComptable1);
@@ -273,12 +274,12 @@ public class ComptabiliteDaoImplTest {
     public void insertListLigneEcritureComptable() {
 
         // GIVEN
-        EcritureComptable vEcritureComptable1 = new EcritureComptable();
+        EcritureComptable vEcritureComptable1 = EcritureComptableBuilder.aEcritureComptable()
+                .journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("AC-2019/00001")
+                .date(new Date()).build();
         vEcritureComptable1.setId(55);
-        vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable1.setDate(new Date());
-        vEcritureComptable1.setLibelle("Libelle");
-        vEcritureComptable1.setReference("AC-2019/00001");
         vEcritureComptable1.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
@@ -303,12 +304,12 @@ public class ComptabiliteDaoImplTest {
     public void updateEcritureComptable() {
 
         // GIVEN
-        EcritureComptable vEcritureComptable1 = new EcritureComptable();
+        EcritureComptable vEcritureComptable1 = EcritureComptableBuilder.aEcritureComptable()
+                .journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("AC-2019/00001")
+                .date(new Date()).build();
         vEcritureComptable1.setId(55);
-        vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable1.setDate(new Date());
-        vEcritureComptable1.setLibelle("Libelle");
-        vEcritureComptable1.setReference("AC-2019/00001");
 
         // WHEN
         comptabiliteDao.updateEcritureComptable(vEcritureComptable1);
@@ -380,10 +381,9 @@ public class ComptabiliteDaoImplTest {
 
         // GIVEN
         List<SequenceEcritureComptable> fakeList = new LinkedList<>();
-        SequenceEcritureComptable sequenceEcritureComptable1 = new SequenceEcritureComptable(new Integer(2019),new Integer(55));
-        sequenceEcritureComptable1.setJournalCode("FE");
-        SequenceEcritureComptable sequenceEcritureComptable2 = new SequenceEcritureComptable(new Integer(2019),new Integer(13));
-        sequenceEcritureComptable2.setJournalCode("AC");
+        SequenceEcritureComptable sequenceEcritureComptable1 = SequenceBuilder.aSequence().derniereVal(55).annee(2019).journalCode("FE").build();
+
+        SequenceEcritureComptable sequenceEcritureComptable2 = SequenceBuilder.aSequence().derniereVal(13).annee(2019).journalCode("AC").build();
         fakeList.add(sequenceEcritureComptable1);
         fakeList.add(sequenceEcritureComptable2);
         when(namedParameterJdbcTemplate.queryForObject(anyString(),any(MapSqlParameterSource.class),any(RowMapper.class))).thenReturn(sequenceEcritureComptable2);
@@ -400,17 +400,16 @@ public class ComptabiliteDaoImplTest {
     }
 
     @Test
-    public void upsertSequenceEcritureComptable() {
+    public void insertSequenceEcritureComptable() {
         Integer oldDerniereValeur = new Integer(55);
-        SequenceEcritureComptable sequenceEcritureComptable1 = new SequenceEcritureComptable(new Integer(2019),oldDerniereValeur);
-        sequenceEcritureComptable1.setJournalCode("FE");
+        SequenceEcritureComptable sequenceEcritureComptable1 = SequenceBuilder.aSequence().derniereVal(55).annee(2019).journalCode("FE").build();
         when(namedParameterJdbcTemplate.update(anyString(),any(MapSqlParameterSource.class))).then((Answer<Void>) invocationOnMock -> {
            sequenceEcritureComptable1.setDerniereValeur(new Integer(56));
             return null;
         });
 
         // WHEN
-        comptabiliteDao.upsertSequenceEcritureComptable(sequenceEcritureComptable1);
+        comptabiliteDao.insertSequenceEcritureComptable(sequenceEcritureComptable1);
 
         // THEN
         assertEquals(sequenceEcritureComptable1.getDerniereValeur(),oldDerniereValeur+1);
@@ -512,11 +511,19 @@ public class ComptabiliteDaoImplTest {
     }
 
     @Test
-    public void setSQLupsertSequenceEcritureComptable() throws NoSuchFieldException, IllegalAccessException{
+    public void setSQLdeleteSequenceEcritureComptable() throws NoSuchFieldException, IllegalAccessException{
         comptabiliteDao = new ComptabiliteDaoImpl();
-        final Field field = comptabiliteDao.getClass().getDeclaredField("SQLupsertSequenceEcritureComptable");
+        final Field field = comptabiliteDao.getClass().getDeclaredField("SQLdeleteSequenceEcritureComptable");
         field.setAccessible(true);
-        assertEquals(field.get(sqlRequet),"SQLupsertSequenceEcritureComptable");
+        assertEquals(field.get(sqlRequet),"SQLdeleteSequenceEcritureComptable");
+    }
+
+    @Test
+    public void setSQLinsertSequenceEcritureComptable() throws NoSuchFieldException, IllegalAccessException{
+        comptabiliteDao = new ComptabiliteDaoImpl();
+        final Field field = comptabiliteDao.getClass().getDeclaredField("SQLinsertSequenceEcritureComptable");
+        field.setAccessible(true);
+        assertEquals(field.get(sqlRequet),"SQLinsertSequenceEcritureComptable");
     }
 
     @BeforeEach
@@ -535,7 +542,8 @@ public class ComptabiliteDaoImplTest {
         comptabiliteDao.setSQLdeleteListLigneEcritureComptable("SQLdeleteListLigneEcritureComptable");
         comptabiliteDao.setSQLgetListJournalComptable("SQLgetListJournalComptable");
         comptabiliteDao.setSQLgetEcritureComptableByRef("SQLgetEcritureComptableByRef");
-        comptabiliteDao.setSQLupsertSequenceEcritureComptable("SQLupsertSequenceEcritureComptable");
+        comptabiliteDao.setSQLinsertSequenceEcritureComptable("SQLinsertSequenceEcritureComptable");
+        comptabiliteDao.setSQLdeleteSequenceEcritureComptable("SQLdeleteSequenceEcritureComptable");
         comptabiliteDao.setSQLloadListLigneEcriture("SQLloadListLigneEcriture");
         comptabiliteDao.setSQLgetListEcritureComptable("SQLgetListEcritureComptable");
         comptabiliteDao.setSQLupdateEcritureComptable("SQLupdateEcritureComptable");

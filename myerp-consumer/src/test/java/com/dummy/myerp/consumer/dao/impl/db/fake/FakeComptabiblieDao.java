@@ -106,7 +106,12 @@ public class FakeComptabiblieDao implements ComptabiliteDao {
     }
 
     @Override
-    public void upsertSequenceEcritureComptable(SequenceEcritureComptable pSequence) {
+    public void deleteSequenceEcritureComptable(SequenceEcritureComptable pSequence) {
+
+    }
+
+    @Override
+    public void insertSequenceEcritureComptable(SequenceEcritureComptable pSequence) {
         fakeListSequence.get(0).setJournalCode(pSequence.getJournalCode());
         fakeListSequence.get(0).setDerniereValeur(pSequence.getDerniereValeur());
         fakeListSequence.get(0).setAnnee(pSequence.getAnnee());
