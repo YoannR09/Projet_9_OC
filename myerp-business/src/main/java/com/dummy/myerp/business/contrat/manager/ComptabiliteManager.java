@@ -85,9 +85,11 @@ public interface ComptabiliteManager {
      */
     void deleteEcritureComptable(Integer pId);
 
+
+    void deleteSequenceEcritureComptable(SequenceEcritureComptable pSequence);
     /**
      * Ajoute une sequence ecriture comptable ou si elle est déjà existante la met à jour.
      * @param pSequence
      */
-    void upsertSequenceEcritureComptable(SequenceEcritureComptable pSequence);
+    void insertSequenceEcritureComptable(SequenceEcritureComptable pSequence);
 }

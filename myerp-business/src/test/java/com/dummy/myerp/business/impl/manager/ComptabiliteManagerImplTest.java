@@ -295,13 +295,13 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void upsertSequenceEcritureComptable() {
+    public void insertSequenceEcritureComptable() {
 
         SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable(new Integer(2019),new Integer(59));
         sequenceEcritureComptable.setJournalCode("AC");
 
         // WHEN
-        manager.upsertSequenceEcritureComptable(sequenceEcritureComptable);
+        manager.insertSequenceEcritureComptable(sequenceEcritureComptable);
     }
 
     @Test

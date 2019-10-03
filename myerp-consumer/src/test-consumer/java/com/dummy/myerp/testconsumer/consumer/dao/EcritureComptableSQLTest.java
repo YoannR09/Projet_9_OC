@@ -5,7 +5,6 @@ import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
-import com.dummy.myerp.model.builder.EcritureComptableBuilder;
 import com.dummy.myerp.technical.exception.NotFoundException;
 import com.dummy.myerp.testconsumer.consumer.ConsumerTestCase;
 import org.junit.jupiter.api.MethodOrderer;
@@ -17,6 +16,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
+import static com.dummy.myerp.testconsumer.consumer.builder.EcritureComptableBuilder.aEcritureComptable;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -30,7 +30,7 @@ public class EcritureComptableSQLTest extends ConsumerTestCase {
     public void create_ecritureComptable_test() throws NotFoundException {
 
         // GIVEN
-        EcritureComptable ecritureComptable = EcritureComptableBuilder.aEcritureComptable()
+        EcritureComptable ecritureComptable = aEcritureComptable()
                 .journal(new JournalComptable("AC","Achat"))
                 .ref("AC-2019/00048")
                 .libelle("Achat")

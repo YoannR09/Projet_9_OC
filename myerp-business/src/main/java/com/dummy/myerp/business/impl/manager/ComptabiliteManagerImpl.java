@@ -94,7 +94,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         vNewSequence.setAnnee(dateEcritureComptable);
         vNewSequence.setDerniereValeur(numeroSequence);
         this.updateEcritureComptable(pEcritureComptable);
-        this.upsertSequenceEcritureComptable(vNewSequence);
+        this.deleteSequenceEcritureComptable(sequenceEcritureComptable);
+        this.insertSequenceEcritureComptable(vNewSequence);
     }
 
     /**
@@ -249,10 +250,25 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      * {@inheritDoc}
      */
     @Override
-    public void upsertSequenceEcritureComptable(SequenceEcritureComptable pSequence) {
+    public void deleteSequenceEcritureComptable(SequenceEcritureComptable pSequence){
         TransactionStatus vTS = getvTS();
         try {
-            daoProxy().getComptabiliteDao().upsertSequenceEcritureComptable(pSequence);
+            daoProxy().getComptabiliteDao();
+            commitMyERP(vTS);
+            vTS = null;
+        } finally {
+            rollbackMyERP(vTS);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void insertSequenceEcritureComptable(SequenceEcritureComptable pSequence) {
+        TransactionStatus vTS = getvTS();
+        try {
+            daoProxy().getComptabiliteDao().insertSequenceEcritureComptable(pSequence);
             commitMyERP(vTS);
             vTS = null;
         } finally {
@@ -279,7 +295,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     protected void commitMyERP(TransactionStatus vTS) {
         getTransactionManager().commitMyERP(vTS);
     }
-
 
     protected Set<ConstraintViolation<EcritureComptable>> getValidate(EcritureComptable pEcritureComptable) {
         return getConstraintValidator().validate(pEcritureComptable);
