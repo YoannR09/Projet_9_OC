@@ -20,8 +20,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.dummy.myerp.consumer.dao.impl.db.builder.EcritureComptableBuilder.aEcritureComptable;
 import static com.dummy.myerp.consumer.dao.impl.db.builder.SequenceBuilder.aSequence;
-import static com.dummy.myerp.testconsumer.consumer.builder.EcritureComptableBuilder.aEcritureComptable;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
