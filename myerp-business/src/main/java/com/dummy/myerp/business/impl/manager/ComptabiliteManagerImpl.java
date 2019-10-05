@@ -62,40 +62,46 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     // CORRECTED
     @Override
     public synchronized void addReference(EcritureComptable pEcritureComptable) throws NotFoundException, FunctionalException {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(pEcritureComptable.getDate());
-        Integer dateEcritureComptable = calendar.get(Calendar.YEAR);
-        SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
-        sequenceEcritureComptable.setJournalCode(pEcritureComptable.getJournal().getCode());
-        sequenceEcritureComptable.setAnnee(dateEcritureComptable);
-        SequenceEcritureComptable vSequence = daoProxy().getComptabiliteDao().getSequenceViaCodeAnnee(sequenceEcritureComptable);
-        Integer numeroSequence;
-        if (vSequence == null){
-            numeroSequence = 1;
-        } else{
-            numeroSequence = vSequence.getDerniereValeur() + 1;
+        TransactionStatus vTS = getvTS();
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(pEcritureComptable.getDate());
+            Integer dateEcritureComptable = calendar.get(Calendar.YEAR);
+            SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
+            sequenceEcritureComptable.setJournalCode(pEcritureComptable.getJournal().getCode());
+            sequenceEcritureComptable.setAnnee(dateEcritureComptable);
+            SequenceEcritureComptable vSequence = daoProxy().getComptabiliteDao().getSequenceViaCodeAnnee(sequenceEcritureComptable);
+            Integer numeroSequence;
+            if (vSequence == null){
+                numeroSequence = 1;
+            } else{
+                numeroSequence = vSequence.getDerniereValeur() + 1;
+            }
+            String vReference;
+            if (numeroSequence.toString().length() == 1){
+                vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/0000"+ numeroSequence;
+            } else if (numeroSequence.toString().length() == 2){
+                vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/000"+ numeroSequence;
+            }else if (numeroSequence.toString().length() == 3){
+                vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/00"+ numeroSequence;
+            }else if (numeroSequence.toString().length() == 4){
+                vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/0"+ numeroSequence;
+            } else  {
+                vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/"+ numeroSequence;
+            }
+            pEcritureComptable.setReference(vReference);
+            SequenceEcritureComptable vNewSequence = new SequenceEcritureComptable();
+            vNewSequence.setJournalCode(pEcritureComptable.getJournal().getCode());
+            vNewSequence.setAnnee(dateEcritureComptable);
+            vNewSequence.setDerniereValeur(numeroSequence);
+            this.updateEcritureComptable(pEcritureComptable);
+            this.deleteSequenceEcritureComptable(sequenceEcritureComptable);
+            this.insertSequenceEcritureComptable(vNewSequence);
+            commitMyERP(vTS);
+            vTS = null;
+        } finally {
+            rollbackMyERP(vTS);
         }
-        String vReference;
-        if (numeroSequence.toString().length() == 1){
-            vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/0000"+ numeroSequence;
-        } else if (numeroSequence.toString().length() == 2){
-            vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/000"+ numeroSequence;
-        }else if (numeroSequence.toString().length() == 3){
-            vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/00"+ numeroSequence;
-        }else if (numeroSequence.toString().length() == 4){
-            vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/0"+ numeroSequence;
-        } else  {
-           vReference = pEcritureComptable.getJournal().getCode() +"-"+ dateEcritureComptable +"/"+ numeroSequence;
-        }
-        pEcritureComptable.setReference(vReference);
-        SequenceEcritureComptable vNewSequence = new SequenceEcritureComptable();
-        vNewSequence.setJournalCode(pEcritureComptable.getJournal().getCode());
-        vNewSequence.setAnnee(dateEcritureComptable);
-        vNewSequence.setDerniereValeur(numeroSequence);
-        this.updateEcritureComptable(pEcritureComptable);
-        this.deleteSequenceEcritureComptable(sequenceEcritureComptable);
-        this.insertSequenceEcritureComptable(vNewSequence);
     }
 
     /**
