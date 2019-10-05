@@ -5,7 +5,6 @@ import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.NotFoundException;
 import com.dummy.myerp.testconsumer.consumer.ConsumerTestCase;
 import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
@@ -16,15 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SequenceEcritureComptableSQLTest extends ConsumerTestCase {
 
     private ComptabiliteDaoImpl comptabiliteDao = new ComptabiliteDaoImpl();
-    private Integer oldDerniereValeur = 49;
 
-    @Test
-    @Order(1)
-    public void delete_sequence() throws NotFoundException {
+    public void delete_sequence(){
 
         // GIVEN
         SequenceEcritureComptable sequenceEcritureComptable = aSequence().annee(2016).journalCode("AC").build();
-        oldDerniereValeur = comptabiliteDao.getSequenceViaCodeAnnee(sequenceEcritureComptable).getDerniereValeur();
 
         // WHEN
         comptabiliteDao.deleteSequenceEcritureComptable(sequenceEcritureComptable);
@@ -33,25 +28,21 @@ public class SequenceEcritureComptableSQLTest extends ConsumerTestCase {
         assertThrows(new NotFoundException().getClass(),() -> comptabiliteDao.getSequenceViaCodeAnnee(sequenceEcritureComptable));
     }
 
-    @Test
-    @Order(2)
     public void insert_sequence(){
 
         // GIVEN
-        SequenceEcritureComptable sequenceEcritureComptable = aSequence().annee(2016).journalCode("AC").derniereVal(oldDerniereValeur).build();
+        SequenceEcritureComptable sequenceEcritureComptable = aSequence().annee(2016).journalCode("AC").derniereVal(49).build();
 
         // WHEN
         comptabiliteDao.insertSequenceEcritureComptable(sequenceEcritureComptable);
 
         // THEN
-       assertEquals(sequenceEcritureComptable.getDerniereValeur(),oldDerniereValeur);
-       sequenceEcritureComptable.setDerniereValeur(sequenceEcritureComptable.getDerniereValeur());
-       comptabiliteDao.deleteSequenceEcritureComptable(sequenceEcritureComptable);
-       comptabiliteDao.insertSequenceEcritureComptable(sequenceEcritureComptable);
+        assertEquals(sequenceEcritureComptable.getDerniereValeur(),49);
+        sequenceEcritureComptable.setDerniereValeur(sequenceEcritureComptable.getDerniereValeur());
+        comptabiliteDao.deleteSequenceEcritureComptable(sequenceEcritureComptable);
+        comptabiliteDao.insertSequenceEcritureComptable(sequenceEcritureComptable);
     }
 
-    @Test
-    @Order(3)
     public void select_sequence_with_code_and_annee() throws NotFoundException {
 
         // GIVEN
@@ -64,5 +55,12 @@ public class SequenceEcritureComptableSQLTest extends ConsumerTestCase {
         // THEN
         assertNotNull(sequenceEcritureComptable.getDerniereValeur());
         assertThrows(new NotFoundException().getClass(),() -> comptabiliteDao.getSequenceViaCodeAnnee(sequenceEcritureComptable1));
+    }
+
+    @Test
+    public void initTest() throws NotFoundException {
+        delete_sequence();
+        insert_sequence();
+        select_sequence_with_code_and_annee();
     }
 }

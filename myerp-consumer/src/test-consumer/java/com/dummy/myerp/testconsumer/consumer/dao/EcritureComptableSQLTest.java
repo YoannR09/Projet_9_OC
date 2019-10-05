@@ -23,34 +23,35 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EcritureComptableSQLTest extends ConsumerTestCase {
 
     ComptabiliteDaoImpl comptabiliteDao = new ComptabiliteDaoImpl();
-    private static Integer id;
 
-    @Test
-    @Order(1)
+    private static String REF = "AC-2019/00077";
+
+
     public void create_ecritureComptable_test() throws NotFoundException {
 
         // GIVEN
         EcritureComptable ecritureComptable = aEcritureComptable()
                 .journal(new JournalComptable("AC","Achat"))
-                .ref("AC-2019/00048")
+                .ref(REF)
                 .libelle("Achat")
                 .date(new Date(2019))
                 .build();
 
         // WHEN
         comptabiliteDao.insertEcritureComptable(ecritureComptable);
+        System.out.println("IIIIIIIIIINNNNNNNNNNNNNSSSSSSSSSEEEEEERRRRRRRRTTTTTTTTTTTTT");
         EcritureComptable ecriture = comptabiliteDao.getEcritureComptableByRef(ecritureComptable.getReference());
 
         // THEN
         assertEquals(ecriture.getJournal().getCode(),"AC");
         assertEquals(ecriture.getJournal().getLibelle(),"Achat");
         assertEquals(ecriture.getLibelle(),"Achat");
-        id = ecriture.getId();
     }
 
-    @Test
-    @Order(2)
     public void select_ecritureComptable_by_id_test() throws NotFoundException {
+
+        // GIVEN
+        Integer id = comptabiliteDao.getEcritureComptableByRef(REF).getId();
 
         // WHEN
         EcritureComptable ecritureComptable = comptabiliteDao.getEcritureComptable(id);
@@ -58,29 +59,24 @@ public class EcritureComptableSQLTest extends ConsumerTestCase {
         // THEN
         assertNotNull(ecritureComptable);
         assertEquals(ecritureComptable.getId(),id);
-        assertEquals(ecritureComptable.getReference(),"AC-2019/00048");
+        assertEquals(ecritureComptable.getReference(),REF);
         assertEquals(ecritureComptable.getLibelle(),"Achat");
     }
 
-    @Test
-    @Order(3)
     public void select_ecritureComptable_by_ref_test() throws NotFoundException {
 
         // WHEN
-        EcritureComptable ecritureComptable = comptabiliteDao.getEcritureComptableByRef("AC-2019/00048");
+        EcritureComptable ecritureComptable = comptabiliteDao.getEcritureComptableByRef(REF);
 
         // THEN
         assertNotNull(ecritureComptable);
-        assertEquals(ecritureComptable.getId(),id);
         assertEquals(ecritureComptable.getLibelle(),"Achat");
     }
 
-    @Test
-    @Order(4)
     public void insert_ligneEcriture_test() throws NotFoundException {
 
         // GIVEN
-        EcritureComptable ecritureComptable = comptabiliteDao.getEcritureComptable(id);
+        EcritureComptable ecritureComptable = comptabiliteDao.getEcritureComptableByRef(REF);
         ecritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(401),
                 null, new BigDecimal(123),
                 null));
@@ -90,16 +86,17 @@ public class EcritureComptableSQLTest extends ConsumerTestCase {
 
         // WHEN
         comptabiliteDao.insertListLigneEcritureComptable(ecritureComptable);
-        EcritureComptable ecritureComptable2 =  comptabiliteDao.getEcritureComptable(id);
+        EcritureComptable ecritureComptable2 =  comptabiliteDao.getEcritureComptable(ecritureComptable.getId());
         comptabiliteDao.loadListLigneEcriture(ecritureComptable2);
 
         // THEN
         assertEquals(ecritureComptable2.getListLigneEcriture().size(),2);
     }
 
-    @Test
-    @Order(5)
     public void load_ligneEcriture_test() throws NotFoundException {
+
+        // GIVEN
+        Integer id = comptabiliteDao.getEcritureComptableByRef(REF).getId();
 
         // GIVEN
         EcritureComptable ecritureComptable = comptabiliteDao.getEcritureComptable(id);
@@ -108,8 +105,6 @@ public class EcritureComptableSQLTest extends ConsumerTestCase {
         comptabiliteDao.loadListLigneEcriture(ecritureComptable);
     }
 
-    @Test
-    @Order(6)
     public void select_list_ecritureComptable_test(){
 
         // WHEN
@@ -120,26 +115,53 @@ public class EcritureComptableSQLTest extends ConsumerTestCase {
         assertTrue(vList.size() != 0);
     }
 
-    @Test
-    @Order(7)
     public void delete_ligne_ecritureComptable_test() throws NotFoundException {
 
+        // GIVEN
+        List<EcritureComptable> vList = comptabiliteDao.getListEcritureComptable();
+        EcritureComptable ecritureComptable1 = null;
+
         // WHEN
-        comptabiliteDao.deleteListLigneEcritureComptable(id);
-        EcritureComptable ecritureComptable = comptabiliteDao.getEcritureComptable(id);
+        for (EcritureComptable ecritureComptable : vList){
+            if (ecritureComptable.getReference().equals(REF)){
+                comptabiliteDao.deleteListLigneEcritureComptable(ecritureComptable.getId());
+                ecritureComptable1 = comptabiliteDao.getEcritureComptable(ecritureComptable.getId());
+            }
+        }
+
 
         // THEN
-        assertEquals(ecritureComptable.getListLigneEcriture().size(),0);
+        assertEquals(ecritureComptable1.getListLigneEcriture().size(),0);
+    }
+
+
+    public void delete_ecritureComptable_test() {
+
+        System.out.println("CAAAAAAAAAAAAAALLLLLLLLLLLLLLL");
+
+        // GIVEN
+        List<EcritureComptable> vList = comptabiliteDao.getListEcritureComptable();
+
+        // WHEN
+        for (EcritureComptable ecritureComptable : vList){
+            if (ecritureComptable.getReference().equals(REF)){
+                comptabiliteDao.deleteEcritureComptable(ecritureComptable.getId());
+            }
+        }
+
+        // THEN
+        assertThrows(new NotFoundException().getClass(), () -> comptabiliteDao.getEcritureComptableByRef(REF));
     }
 
     @Test
-    @Order(8)
-    public void delete_ecritureComptable_test(){
-
-        // WHEN
-        comptabiliteDao.deleteEcritureComptable(id);
-
-        // THEN
-        assertThrows(new NotFoundException().getClass(), () -> comptabiliteDao.getEcritureComptable(id));
+    public void initTest() throws NotFoundException {
+        create_ecritureComptable_test();
+        select_ecritureComptable_by_id_test();
+        select_ecritureComptable_by_ref_test();
+        insert_ligneEcriture_test();
+        load_ligneEcriture_test();
+        select_list_ecritureComptable_test();
+        delete_ligne_ecritureComptable_test();
+        delete_ecritureComptable_test();
     }
 }
