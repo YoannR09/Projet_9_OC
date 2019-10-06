@@ -7,10 +7,7 @@ import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.NotFoundException;
 import com.dummy.myerp.testconsumer.consumer.ConsumerTestCase;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -19,7 +16,6 @@ import java.util.List;
 import static com.dummy.myerp.testconsumer.consumer.builder.EcritureComptableBuilder.aEcritureComptable;
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class EcritureComptableSQLTest extends ConsumerTestCase {
 
     ComptabiliteDaoImpl comptabiliteDao = new ComptabiliteDaoImpl();
@@ -39,7 +35,6 @@ public class EcritureComptableSQLTest extends ConsumerTestCase {
 
         // WHEN
         comptabiliteDao.insertEcritureComptable(ecritureComptable);
-        System.out.println("IIIIIIIIIINNNNNNNNNNNNNSSSSSSSSSEEEEEERRRRRRRRTTTTTTTTTTTTT");
         EcritureComptable ecriture = comptabiliteDao.getEcritureComptableByRef(ecritureComptable.getReference());
 
         // THEN
@@ -136,8 +131,6 @@ public class EcritureComptableSQLTest extends ConsumerTestCase {
 
 
     public void delete_ecritureComptable_test() {
-
-        System.out.println("CAAAAAAAAAAAAAALLLLLLLLLLLLLLL");
 
         // GIVEN
         List<EcritureComptable> vList = comptabiliteDao.getListEcritureComptable();
