@@ -56,6 +56,7 @@
         <!-- Test libraries JUnit 5, Mockito -->
         <junit.jupiter.version>5.5.1</junit.jupiter.version>
         <mockito.version>2.10.0</mockito.version>
+        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
     </properties>
 
 
@@ -394,6 +395,82 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>1.10</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.5.7.201204190339</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.6</version>
+                    <executions>
+                        <execution>
+                            <phase>post-integration-test</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <configuration>
+                                <target>
+                                    <!-- Execute an ant task within maven -->
+                                    <echo message="Generating JaCoCo Reports" />
+                                    <taskdef name="report" classname="org.jacoco.ant.ReportTask">
+                                        <classpath path="${basedir}/target/jacoco-jars/org.jacoco.ant.jar" />
+                                    </taskdef>
+                                    <mkdir dir="${basedir}/target/coverage-report" />
+                                    <report>
+                                        <executiondata>
+                                            <fileset dir="myerp">
+                                                <include name="jacoco.exec" />
+                                            </fileset>
+                                            <fileset dir="${build.directory.projectb}">
+                                                <include name="jacoco.exec" />
+                                            </fileset>
+                                        </executiondata>
+                                        <structure name="jacoco-multi Coverage Project">
+                                            <group name="jacoco-multi">
+                                                <classfiles>
+                                                    <fileset dir="${java.class.path}" />
+                                                    <fileset dir="${classes.directory.projectb}" />
+                                                </classfiles>
+                                                <sourcefiles encoding="UTF-8">
+                                                    <fileset dir="${sources.directory.projecta}" />
+                                                    <fileset dir=""></fileset>
+                                                </sourcefiles>
+                                            </group>
+                                        </structure>
+                                        <html destdir="${basedir}/target/coverage-report/html" />
+                                        <xml destfile="${basedir}/target/coverage-report/coverage-report.xml" />
+                                        <csv destfile="${basedir}/target/coverage-report/coverage-report.csv" />
+                                    </report>
+                                </target>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.jacoco</groupId>
+                            <artifactId>org.jacoco.ant</artifactId>
+                            <version>${jacoco.version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>

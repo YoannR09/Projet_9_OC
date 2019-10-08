@@ -3,10 +3,8 @@ package com.dummy.myerp.testbusiness.business.manager;
 import com.dummy.myerp.business.impl.TransactionManager;
 import com.dummy.myerp.business.impl.manager.ComptabiliteManagerImpl;
 import com.dummy.myerp.model.bean.comptabilite.*;
-import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
 import com.dummy.myerp.testbusiness.business.BusinessTestCase;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.TransactionStatus;
 
@@ -22,13 +20,10 @@ public class ManagerToDbTest extends BusinessTestCase {
 
     ComptabiliteManagerImpl manager = new ComptabiliteManagerImpl();
     TransactionManager ts = new TransactionManager();
-    private static Integer id;
-
 
 
     @Test
-    @Order(1)
-    public void create_ecritureComptable() throws FunctionalException {
+    public void create_ecritureComptable() throws NotFoundException {
 
         // GIVEN
         EcritureComptable ecritureComptable = aEcritureComptable()
@@ -45,13 +40,17 @@ public class ManagerToDbTest extends BusinessTestCase {
                 new BigDecimal(123)));
 
         TransactionStatus vTS = ts.beginTransactionMyERP();
+
+        // WHEN
         manager.getDaoProxy().getComptabiliteDao().insertEcritureComptable(ecritureComptable);
+
+        // THEN
+        assertNotNull(manager.getDaoProxy().getComptabiliteDao().getEcritureComptableByRef("AC-2019/00450"));
         ts.rollbackMyERP(vTS);
     }
 
 
     @Test
-    @Order(2)
     public void select_list_ecritureComptable(){
 
         // WHEN
@@ -63,7 +62,6 @@ public class ManagerToDbTest extends BusinessTestCase {
     }
 
     @Test
-    @Order(3)
     public void delete_ecritureComptable(){
 
         // GIVEN
@@ -81,7 +79,6 @@ public class ManagerToDbTest extends BusinessTestCase {
     }
 
     @Test
-    @Order(4)
     public void create_sequenceEcritureComptable() throws NotFoundException {
 
         // GIVEN
@@ -95,11 +92,9 @@ public class ManagerToDbTest extends BusinessTestCase {
         // THEN
         assertNotNull(manager.getDaoProxy().getComptabiliteDao().getSequenceViaCodeAnnee(sequenceEcritureComptable));
         ts.rollbackMyERP(vTS);
-
     }
 
     @Test
-    @Order(5)
     public void select_list_compteComptable(){
 
         // WHEN

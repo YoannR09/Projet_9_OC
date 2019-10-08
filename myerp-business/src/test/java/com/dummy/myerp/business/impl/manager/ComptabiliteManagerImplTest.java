@@ -2,13 +2,11 @@ package com.dummy.myerp.business.impl.manager;
 
 
 import com.dummy.myerp.business.contrat.BusinessProxy;
-import com.dummy.myerp.business.contrat.manager.ComptabiliteManager;
 import com.dummy.myerp.business.impl.TransactionManager;
 import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.TransactionStatus;
 
@@ -20,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import static com.dummy.myerp.business.impl.manager.builder.EcritureComptableBuilder.aEcritureComptable;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -34,18 +33,16 @@ public class ComptabiliteManagerImplTest {
     public void addReference() throws NotFoundException, FunctionalException {
 
         // GIVEN
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Libelle");
+        String oldRef = "AC-2019/00001";
+        vEcritureComptable = aEcritureComptable().date(new Date()).journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref(oldRef).build();
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, null,
                 new BigDecimal(123)));
-        String oldRef = "AC-2019/00001";
-        vEcritureComptable.setReference(oldRef);
 
         // WHEN
         manager.addReference(vEcritureComptable);
@@ -59,7 +56,6 @@ public class ComptabiliteManagerImplTest {
     @Test
     public void getListCompteComptable() {
 
-
         // WHEN
         List<CompteComptable> vList = manager.getListCompteComptable();
 
@@ -70,7 +66,6 @@ public class ComptabiliteManagerImplTest {
 
     @Test
     public void getListJournalComptable() {
-
 
         // WHEN
         List<JournalComptable> vList = manager.getListJournalComptable();
@@ -122,17 +117,13 @@ public class ComptabiliteManagerImplTest {
     }
 
 
-    /**
-     * Test si l'écriture comptable est équilibrée
-     */
+
     @Test
     public void checkEcritureComptableUnitRG2(){
 
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.setReference("BQ-2019/00001");
+        vEcritureComptable = aEcritureComptable().date(new Date()).journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("BQ-2019/00001").build();
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
@@ -146,11 +137,9 @@ public class ComptabiliteManagerImplTest {
     @Test
     public void checkEcritureComptableUnitRG3(){
 
-        vEcritureComptable = mock(EcritureComptable.class);
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.setReference("BQ-2019/00001");
+        vEcritureComptable = aEcritureComptable().date(new Date()).journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("BQ-2019/00001").build();
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
@@ -164,11 +153,9 @@ public class ComptabiliteManagerImplTest {
     @Test
     public void checkEcritureComptableUnitRG5() throws FunctionalException {
 
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.setReference("AC-2015/00001");
+        vEcritureComptable = aEcritureComptable().date(new Date()).journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("AC-2015/00001").build();
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
@@ -191,11 +178,9 @@ public class ComptabiliteManagerImplTest {
     public void checkEcritureComptableUnitRG6() throws FunctionalException {
 
         // GIVEN
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.setReference("AC-2015/00001");
+        vEcritureComptable = aEcritureComptable().date(new Date()).journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("AC-2015/00001").build();
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
@@ -217,11 +202,10 @@ public class ComptabiliteManagerImplTest {
     @Test
     public void checkEcritureComptable() throws FunctionalException{
 
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.setReference("AC-2019/02201");
+        // GIVEN
+        vEcritureComptable = aEcritureComptable().date(new Date()).journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("AC-2019/02201").build();
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
@@ -251,11 +235,9 @@ public class ComptabiliteManagerImplTest {
     public void updateEcritureComptable() throws FunctionalException {
 
         // GIVEN
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.setReference("AC-2019/02201");
+        vEcritureComptable = aEcritureComptable().date(new Date()).journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("AC-2019/02201").build();
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
@@ -274,21 +256,19 @@ public class ComptabiliteManagerImplTest {
 
         // GIVEN
         Integer listSize = manager.getListEcritureComptable().size();
-        EcritureComptable vEcritureComptable1 = new EcritureComptable();
-        vEcritureComptable1.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable1.setDate(new Date());
-        vEcritureComptable1.setId(45);
-        vEcritureComptable1.setLibelle("Libelle");
-        vEcritureComptable1.setReference("AC-2019/00001");
-        vEcritureComptable1.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+        vEcritureComptable = aEcritureComptable().date(new Date()).journal(new JournalComptable("AC", "Achat"))
+                .libelle("Libelle")
+                .ref("AC-2019/00001").build();
+        vEcritureComptable.setId(45);
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 null));
-        vEcritureComptable1.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
                 null, null,
                 new BigDecimal(123)));
 
         // WHEN
-        manager.insertEcritureComptable(vEcritureComptable1);
+        manager.insertEcritureComptable(vEcritureComptable);
 
         // THEN
         assertEquals(listSize+1,manager.getListEcritureComptable().size());

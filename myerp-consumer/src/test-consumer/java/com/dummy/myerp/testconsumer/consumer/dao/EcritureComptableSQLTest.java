@@ -20,7 +20,7 @@ public class EcritureComptableSQLTest extends ConsumerTestCase {
 
     ComptabiliteDaoImpl comptabiliteDao = new ComptabiliteDaoImpl();
 
-    private static String REF = "AC-2019/00077";
+    private static String REF = "AC-2019/00111";
 
 
     public void create_ecritureComptable_test() throws NotFoundException {
@@ -113,34 +113,24 @@ public class EcritureComptableSQLTest extends ConsumerTestCase {
     public void delete_ligne_ecritureComptable_test() throws NotFoundException {
 
         // GIVEN
-        List<EcritureComptable> vList = comptabiliteDao.getListEcritureComptable();
-        EcritureComptable ecritureComptable1 = null;
+        EcritureComptable ecritureComptable = comptabiliteDao.getEcritureComptableByRef(REF);
 
         // WHEN
-        for (EcritureComptable ecritureComptable : vList){
-            if (ecritureComptable.getReference().equals(REF)){
-                comptabiliteDao.deleteListLigneEcritureComptable(ecritureComptable.getId());
-                ecritureComptable1 = comptabiliteDao.getEcritureComptable(ecritureComptable.getId());
-            }
-        }
-
+        comptabiliteDao.deleteListLigneEcritureComptable(ecritureComptable.getId());
 
         // THEN
+        EcritureComptable ecritureComptable1 = comptabiliteDao.getEcritureComptableByRef(REF);
         assertEquals(ecritureComptable1.getListLigneEcriture().size(),0);
     }
 
 
-    public void delete_ecritureComptable_test() {
+    public void delete_ecritureComptable_test() throws NotFoundException {
 
         // GIVEN
-        List<EcritureComptable> vList = comptabiliteDao.getListEcritureComptable();
+        EcritureComptable ecritureComptable = comptabiliteDao.getEcritureComptableByRef(REF);
 
         // WHEN
-        for (EcritureComptable ecritureComptable : vList){
-            if (ecritureComptable.getReference().equals(REF)){
-                comptabiliteDao.deleteEcritureComptable(ecritureComptable.getId());
-            }
-        }
+        comptabiliteDao.deleteEcritureComptable(ecritureComptable.getId());
 
         // THEN
         assertThrows(new NotFoundException().getClass(), () -> comptabiliteDao.getEcritureComptableByRef(REF));
