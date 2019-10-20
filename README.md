@@ -52,14 +52,17 @@ Il comporte :
 
 ## Modifications éffectués
 
-    - Implémentation des tests unitaires pour les couches consumer,business,model et techical
+    - Implémentation des tests unitaires pour les couches consumer,business,model et techical.
     - Implémentation des tests d'intégration pour la couche consumer et business.
     - Modification de certains constructeurs pour tester les méthodes de la classe.
     - Ajout d'un fichier travis.yml pour automatiserez les tests.
     - Intégration de la méthode addReference dans la classe ComptabiliteManagerImpl.
     - Ajout de deux méthodes insertSequenceEcritureComptable et deleteEcritueComptable
      ainsi que leurs requetes SQL dans le fichier sqlContext.xml.
-    - Implémentation de la  RG_Compta_5 dans la classe ComptabiliteManagerImpl
-    - Passage de JUnit 4 vers JUnit 5/Jupiter
+    - Implémentation de la  RG_Compta_5 dans la classe ComptabiliteManagerImpl.
+    - Passage de JUnit 4 vers JUnit 5/Jupiter.
+    - Ajout de CORRECTED à la place des TODO.
+    - Mise en commantires de deux lignes dans le fichier ste.xml qui générait une erreur pendant
+    le mvn site site:stage.
    
     

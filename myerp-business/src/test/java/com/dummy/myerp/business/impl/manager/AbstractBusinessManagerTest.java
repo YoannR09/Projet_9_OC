@@ -46,5 +46,4 @@ public class AbstractBusinessManagerTest extends AbstractBusinessManager{
         TransactionManager transactionManager = mock(TransactionManager.class);
         configure(businessProxy,daoProxy,transactionManager);
     }
-
 }
