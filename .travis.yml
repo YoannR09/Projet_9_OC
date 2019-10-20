@@ -1,7 +1,7 @@
 language: java
 
 jdk:
-  - oraclejdk11
+  - oraclejdk8
 
 sudo: required
 
@@ -17,6 +17,7 @@ before_script:
 
 script:
   - mvn clean
+  - mvn package
   - mvn test
   - mvn test -Ptest-consumer
   - mvn test -Ptest-business
